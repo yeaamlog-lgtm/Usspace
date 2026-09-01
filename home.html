@@ -1,417 +1,920 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#fff3f7">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff3f7"
+    >
 
     <title>USSPACE • Home</title>
 
-    <link rel="stylesheet" href="home.css">
+    <link
+        rel="stylesheet"
+        href="home.css"
+    >
+
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+
 </head>
+
 
 <body>
 
-<div id="sakuraContainer" class="sakura-container"></div>
+    <!-- =====================================================
+         SAKURA BACKGROUND
+         ===================================================== -->
 
-<header class="topbar">
+    <div
+        id="sakuraContainer"
+        class="sakura-container"
+    ></div>
 
-    <div class="brand-area">
-        <div class="logo">🌸</div>
 
-        <div>
-            <div class="brand">
-                US<span>SPACE</span>
-            </div>
+    <!-- =====================================================
+         TOP BAR
+         ===================================================== -->
 
-            <div class="subtitle">
-                OUR LITTLE WORLD
-            </div>
-        </div>
-    </div>
+    <header class="topbar">
 
-    <div class="top-actions">
+        <div class="topbar-left">
 
-        <div class="connection">
-            <span id="connectionDot"></span>
-            <span id="connectionText">Connecting...</span>
-        </div>
-
-        <button id="inviteButton" class="top-button">
-            🔗
-        </button>
-
-        <button id="logoutButton" class="top-button">
-            ⇥
-        </button>
-
-    </div>
-
-</header>
-
-
-<main class="container">
-
-
-    <!-- WELCOME -->
-
-    <section class="welcome">
-
-        <p class="eyebrow">WELCOME BACK</p>
-
-        <h1>
-            Hello,
-            <span id="usernameDisplay">You</span>
-            ♡
-        </h1>
-
-        <p>Two screens. One little space.</p>
-
-    </section>
-
-
-    <!-- ROOM STATUS -->
-
-    <section class="room-card">
-
-        <div>
-            <span class="room-label">PRIVATE SPACE</span>
-
-            <h2 id="roomDisplay">
-                Not connected
-            </h2>
-
-            <p id="roomStatus">
-                Join your space to start.
-            </p>
-        </div>
-
-        <div class="room-icon">
-            🔐
-        </div>
-
-    </section>
-
-
-    <!-- SCREENS -->
-
-    <section class="card">
-
-        <div class="heading">
-
-            <div class="heading-icon">📱</div>
-
-            <div>
-                <h2>Our Screens</h2>
-                <p>See each other</p>
-            </div>
-
-            <a href="video.html">
-                Video Call →
-            </a>
-
-        </div>
-
-
-        <div class="screens">
-
-            <div class="screen">
-
-                <video
-                    id="localVideo"
-                    autoplay
-                    muted
-                    playsinline
-                ></video>
-
-                <div id="localPlaceholder" class="placeholder">
-                    <span>📷</span>
-                    <strong>You</strong>
-                    <small>Camera off</small>
-                </div>
-
-                <label>YOU</label>
-
-            </div>
-
-
-            <div class="screen">
-
-                <video
-                    id="remoteVideo"
-                    autoplay
-                    playsinline
-                ></video>
-
-                <div id="remotePlaceholder" class="placeholder">
-                    <span>🌸</span>
-                    <strong>Partner</strong>
-                    <small id="partnerStatus">
-                        Waiting to join
-                    </small>
-                </div>
-
-                <label>PARTNER</label>
-
-            </div>
-
-        </div>
-
-
-        <div class="camera-controls">
-
-            <button id="cameraButton">
-                📷
-            </button>
-
-            <button id="switchCameraButton">
-                🔄
-            </button>
-
-            <a href="video.html">
-                📹 Open Video Call
-            </a>
-
-        </div>
-
-        <p id="cameraStatus" class="camera-status">
-            Camera ready
-        </p>
-
-    </section>
-
-
-    <!-- CHAT -->
-
-    <section class="card">
-
-        <div class="heading">
-
-            <div class="heading-icon">💬</div>
-
-            <div>
-                <h2>Little Chat</h2>
-                <p>Just between us</p>
-            </div>
-
-            <span class="live">LIVE</span>
-
-        </div>
-
-
-        <div id="chatMessages" class="chat-messages">
-
-            <div id="emptyChat" class="empty-chat">
+            <div class="mini-logo">
                 🌸
-                <p>Say something nice...</p>
+            </div>
+
+            <div>
+
+                <div class="brand">
+                    US<span>SPACE</span>
+                </div>
+
+                <div class="brand-subtitle">
+                    OUR LITTLE WORLD
+                </div>
+
             </div>
 
         </div>
 
 
-        <form id="chatForm" class="chat-form">
+        <div class="topbar-right">
 
-            <input
-                id="chatInput"
-                type="text"
-                maxlength="500"
-                autocomplete="off"
-                placeholder="Write something..."
+            <div class="online-status">
+
+                <span
+                    id="connectionDot"
+                    class="status-dot"
+                ></span>
+
+                <span id="connectionText">
+                    Connecting...
+                </span>
+
+            </div>
+
+
+            <button
+                id="logoutButton"
+                class="icon-button"
+                type="button"
+            >
+                ⇥
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="home-container">
+
+
+        <!-- =================================================
+             WELCOME
+             ================================================= -->
+
+        <section class="welcome-section">
+
+            <p class="eyebrow">
+                WELCOME BACK
+            </p>
+
+            <h1>
+                Hello,
+                <span id="usernameDisplay">
+                    You
+                </span>
+                ♡
+            </h1>
+
+            <p>
+                Two screens. One little space.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INVITE / JOIN
+             ================================================= -->
+
+        <section class="section-card invite-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        💌
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Invite Your Person
+                        </h2>
+
+                        <p>
+                            Share your code to join the same space
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="invite-content">
+
+
+                <!-- GENERATED CODE -->
+
+                <div class="invite-code-box">
+
+                    <span>
+                        YOUR INVITE CODE
+                    </span>
+
+                    <strong id="inviteCodeDisplay">
+                        ------ 
+                    </strong>
+
+                </div>
+
+
+                <!-- COPY -->
+
+                <button
+                    id="copyInviteButton"
+                    class="invite-action"
+                    type="button"
+                >
+                    📋 Copy Code
+                </button>
+
+
+                <!-- JOIN -->
+
+                <button
+                    id="openJoinButton"
+                    class="invite-action secondary"
+                    type="button"
+                >
+                    🔗 Join Space
+                </button>
+
+            </div>
+
+
+            <p
+                id="inviteMessage"
+                class="invite-message"
+            ></p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OUR SCREENS
+             ================================================= -->
+
+        <section class="section-card screens-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        📱
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Our Screens
+                        </h2>
+
+                        <p>
+                            See each other
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="video.html"
+                    class="small-link"
+                >
+                    Video Call →
+                </a>
+
+            </div>
+
+
+            <!-- SIDE BY SIDE -->
+
+            <div class="screens-container">
+
+
+                <!-- YOUR SCREEN -->
+
+                <div class="video-screen">
+
+                    <video
+                        id="localVideo"
+                        autoplay
+                        muted
+                        playsinline
+                    ></video>
+
+
+                    <div
+                        id="localPlaceholder"
+                        class="video-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            📷
+                        </div>
+
+                        <strong>
+                            You
+                        </strong>
+
+                        <small>
+                            Camera off
+                        </small>
+
+                    </div>
+
+
+                    <div class="screen-name">
+                        YOU
+                    </div>
+
+                </div>
+
+
+
+                <!-- PARTNER SCREEN -->
+
+                <div class="video-screen">
+
+                    <video
+                        id="remoteVideo"
+                        autoplay
+                        playsinline
+                    ></video>
+
+
+                    <div
+                        id="remotePlaceholder"
+                        class="video-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            🌸
+                        </div>
+
+                        <strong>
+                            Partner
+                        </strong>
+
+                        <small id="partnerStatus">
+                            Waiting to join
+                        </small>
+
+                    </div>
+
+
+                    <div class="screen-name">
+                        PARTNER
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CAMERA CONTROLS -->
+
+            <div class="camera-controls">
+
+                <button
+                    id="cameraButton"
+                    class="circle-control"
+                    type="button"
+                >
+                    📷
+                </button>
+
+
+                <button
+                    id="switchCameraButton"
+                    class="circle-control"
+                    type="button"
+                >
+                    🔄
+                </button>
+
+
+                <a
+                    href="video.html"
+                    class="call-button"
+                >
+                    📹 Open Video Call
+                </a>
+
+            </div>
+
+
+            <div
+                id="cameraStatus"
+                class="camera-status"
+            >
+                Camera ready
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CHAT
+             ================================================= -->
+
+        <section class="section-card chat-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        💬
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Little Chat
+                        </h2>
+
+                        <p>
+                            Just between us
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="live-label">
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div
+                id="chatMessages"
+                class="chat-messages"
             >
 
-            <button type="submit">
-                ➤
+                <div
+                    id="emptyChat"
+                    class="empty-chat"
+                >
+
+                    <div>
+                        🌸
+                    </div>
+
+                    <p>
+                        Say something nice...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="chatForm"
+                class="chat-form"
+            >
+
+                <input
+                    id="chatInput"
+                    type="text"
+                    maxlength="500"
+                    autocomplete="off"
+                    placeholder="Write something..."
+                >
+
+                <button
+                    type="submit"
+                    class="send-button"
+                >
+                    ➤
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             WEATHER
+             ================================================= -->
+
+        <section class="section-card weather-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        🌤️
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Our Weather
+                        </h2>
+
+                        <p>
+                            Share what's outside
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="weather-people">
+
+
+                <div class="weather-person">
+
+                    <span class="weather-label">
+                        YOU
+                    </span>
+
+                    <div
+                        id="myWeatherIcon"
+                        class="weather-icon"
+                    >
+                        🌤️
+                    </div>
+
+                    <strong id="myTemperature">
+                        --°C
+                    </strong>
+
+                    <p id="myWeatherLocation">
+                        Not shared
+                    </p>
+
+                </div>
+
+
+
+                <div class="weather-person">
+
+                    <span class="weather-label">
+                        PARTNER
+                    </span>
+
+                    <div
+                        id="partnerWeatherIcon"
+                        class="weather-icon"
+                    >
+                        🌸
+                    </div>
+
+                    <strong id="partnerTemperature">
+                        --°C
+                    </strong>
+
+                    <p id="partnerWeatherLocation">
+                        Waiting
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="shareWeatherButton"
+                class="weather-button"
+                type="button"
+            >
+                🌤️ Share My Weather
             </button>
 
-        </form>
-
-    </section>
+        </section>
 
 
-    <!-- WEATHER -->
 
-    <section class="card">
+        <!-- =================================================
+             TAKE A BREAK
+             ================================================= -->
 
-        <div class="heading">
+        <section class="break-card">
 
-            <div class="heading-icon">🌤️</div>
-
-            <div>
-                <h2>Our Weather</h2>
-                <p>Share what's outside</p>
+            <div class="break-decoration">
+                🌿
             </div>
 
-        </div>
+            <div class="break-content">
 
+                <p class="eyebrow">
+                    SLOW DOWN
+                </p>
 
-        <div class="weather-grid">
+                <h2>
+                    Take a little break
+                </h2>
 
-            <div class="weather-box">
-
-                <span>YOU</span>
-
-                <strong id="myTemperature">
-                    --°C
-                </strong>
-
-                <p id="myWeatherLocation">
-                    Not shared
+                <p>
+                    Breathe, relax and enjoy the moment.
                 </p>
 
             </div>
 
 
-            <div class="weather-box">
+            <button
+                id="breakButton"
+                class="break-button"
+                type="button"
+            >
+                TAKE A BREAK
+            </button>
 
-                <span>PARTNER</span>
+        </section>
 
-                <strong id="partnerTemperature">
-                    --°C
-                </strong>
 
-                <p id="partnerWeatherLocation">
-                    Waiting
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <section class="navigation-section">
+
+            <div class="navigation-title">
+
+                <p class="eyebrow">
+                    EXPLORE
                 </p>
+
+                <h2>
+                    Our Space 🌸
+                </h2>
 
             </div>
 
+
+            <nav class="navigation-grid">
+
+
+                <a
+                    href="video.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        📹
+                    </div>
+
+                    <strong>
+                        Video Call
+                    </strong>
+
+                    <small>
+                        See each other
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="canvas.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        🎨
+                    </div>
+
+                    <strong>
+                        Canvas
+                    </strong>
+
+                    <small>
+                        Draw together
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="cinema.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        🎬
+                    </div>
+
+                    <strong>
+                        Cinema
+                    </strong>
+
+                    <small>
+                        Watch together
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="notes.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        📝
+                    </div>
+
+                    <strong>
+                        Notes
+                    </strong>
+
+                    <small>
+                        Write together
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="memories.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        📸
+                    </div>
+
+                    <strong>
+                        Memories
+                    </strong>
+
+                    <small>
+                        Keep moments
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="games.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        🎮
+                    </div>
+
+                    <strong>
+                        Games
+                    </strong>
+
+                    <small>
+                        Play together
+                    </small>
+
+                </a>
+
+            </nav>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         INVITE / JOIN MODAL
+         ===================================================== -->
+
+    <div
+        id="inviteModal"
+        class="modal-overlay"
+        aria-hidden="true"
+    >
+
+        <div class="invite-modal">
+
+            <button
+                id="closeInviteModal"
+                class="modal-close"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-flower">
+                💕
+            </div>
+
+
+            <p class="eyebrow">
+                YOUR LITTLE SPACE
+            </p>
+
+
+            <h2>
+                Invite Your Person
+            </h2>
+
+
+            <p class="modal-description">
+                Share this code with your person.
+                They can use it to join your space.
+            </p>
+
+
+            <div class="big-invite-code">
+
+                <span>
+                    INVITE CODE
+                </span>
+
+                <strong id="modalInviteCode">
+                    ------
+                </strong>
+
+            </div>
+
+
+            <button
+                id="modalCopyButton"
+                class="modal-primary-button"
+                type="button"
+            >
+                📋 Copy Invite Code
+            </button>
+
+
+            <div class="modal-divider">
+                OR JOIN ANOTHER SPACE
+            </div>
+
+
+            <form id="joinForm">
+
+                <label for="joinCodeInput">
+                    Enter Invite Code
+                </label>
+
+                <input
+                    id="joinCodeInput"
+                    type="text"
+                    maxlength="6"
+                    autocomplete="off"
+                    placeholder="ABC123"
+                >
+
+
+                <button
+                    type="submit"
+                    class="modal-join-button"
+                >
+                    🔗 Join Space
+                </button>
+
+            </form>
+
+
+            <p
+                id="inviteMessage"
+                class="invite-message"
+            ></p>
+
         </div>
-
-
-        <button
-            id="shareWeatherButton"
-            class="weather-button"
-        >
-            🌤️ Share My Weather
-        </button>
-
-    </section>
-
-
-    <!-- NAVIGATION -->
-
-    <section class="navigation">
-
-        <p class="eyebrow">EXPLORE</p>
-
-        <h2>Our Space 🌸</h2>
-
-
-        <div class="nav-grid">
-
-            <a href="video.html">
-                📹
-                <strong>Video Call</strong>
-                <small>See each other</small>
-            </a>
-
-            <a href="canvas.html">
-                🎨
-                <strong>Canvas</strong>
-                <small>Draw together</small>
-            </a>
-
-            <a href="cinema.html">
-                🎬
-                <strong>Cinema</strong>
-                <small>Watch together</small>
-            </a>
-
-            <a href="notes.html">
-                📝
-                <strong>Notes</strong>
-                <small>Write together</small>
-            </a>
-
-            <a href="memories.html">
-                📸
-                <strong>Memories</strong>
-                <small>Keep moments</small>
-            </a>
-
-            <a href="games.html">
-                🎮
-                <strong>Games</strong>
-                <small>Play together</small>
-            </a>
-
-        </div>
-
-    </section>
-
-</main>
-
-
-<!-- INVITE MODAL -->
-
-<div id="inviteOverlay" class="overlay">
-
-    <div class="invite-modal">
-
-        <button
-            id="closeInviteButton"
-            class="close"
-        >
-            ×
-        </button>
-
-        <div class="flower">🌸</div>
-
-        <p class="eyebrow">PRIVATE INVITATION</p>
-
-        <h2>Join USSPACE ♡</h2>
-
-        <p class="modal-text">
-            Use the same invite code on both phones
-            to share one private space.
-        </p>
-
-
-        <label>Your Name</label>
-
-        <input
-            id="inviteName"
-            class="modal-input"
-            type="text"
-            maxlength="30"
-            placeholder="Prakhar"
-        >
-
-
-        <label>Invite Code</label>
-
-        <input
-            id="inviteCode"
-            class="modal-input code-input"
-            type="text"
-            maxlength="30"
-            autocomplete="off"
-            placeholder="e.g. US-5827"
-        >
-
-
-        <p id="inviteError" class="error"></p>
-
-
-        <button
-            id="joinSpaceButton"
-            class="join-button"
-        >
-            🌸 Join Space
-        </button>
-
-
-        <p class="hint">
-            Same code = same space
-        </p>
 
     </div>
 
-</div>
 
 
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <!-- =====================================================
+         BREAK OVERLAY
+         ===================================================== -->
+
+    <div
+        id="breakOverlay"
+        class="break-overlay"
+        aria-hidden="true"
+    >
+
+        <div class="break-window">
+
+            <div class="break-flower">
+                🌸
+            </div>
+
+            <p class="eyebrow">
+                TAKE A BREATH
+            </p>
+
+            <h2>
+                A little pause ♡
+            </h2>
+
+            <p>
+                Put everything down for a moment.
+                <br>
+                Breathe slowly.
+                <br>
+                Enjoy the little things.
+            </p>
+
+            <div class="breathing-circle">
+                BREATHE
+            </div>
+
+            <button
+                id="closeBreakButton"
+                class="close-break-button"
+                type="button"
+            >
+                Back to USSPACE
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HOME JAVASCRIPT
+         ===================================================== -->
+<script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
 <script src="home.js"></script>
 
 </body>
-</html>
+
+                        </html>
