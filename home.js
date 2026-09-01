@@ -1,195 +1,573 @@
 /* =========================================================
-   USSPACE — HOME.JS
-   Home Dashboard Logic
+   USSPACE • HOME.JS
    ========================================================= */
 
-"use strict";
+const socket = io(window.location.origin);
+let username =
+    localStorage.getItem("usspace_username") || "";
+
+let inviteCode =
+    localStorage.getItem("usspace_invite_code") || "";
+
+let roomJoined = false;
 
 
 /* =========================================================
-   LOGIN PROTECTION
+   ELEMENTS
    ========================================================= */
 
-const currentUser =
-    localStorage.getItem("usspace_user");
+const $ = id => document.getElementById(id);
 
-const loggedIn =
-    localStorage.getItem("usspace_logged_in");
+const connectionDot = $("connectionDot");
+const connectionText = $("connectionText");
+
+const usernameDisplay = $("usernameDisplay");
+
+const roomDisplay = $("roomDisplay");
+const roomStatus = $("roomStatus");
+
+const partnerStatus = $("partnerStatus");
+
+const inviteOverlay = $("inviteOverlay");
+const inviteButton = $("inviteButton");
+const closeInviteButton = $("closeInviteButton");
+
+const inviteName = $("inviteName");
+const inviteCodeInput = $("inviteCode");
+
+const inviteError = $("inviteError");
+const joinSpaceButton = $("joinSpaceButton");
+
+const logoutButton = $("logoutButton");
 
 
-if (
-    !currentUser ||
-    loggedIn !== "true"
-) {
-    window.location.replace("index.html");
+/* =========================================================
+   INITIAL USER
+   ========================================================= */
+
+if (username) {
+    usernameDisplay.textContent = username;
+}
+
+if (inviteCode) {
+    roomDisplay.textContent =
+        "US-" + inviteCode.toUpperCase();
+
+    roomStatus.textContent =
+        "Private room";
 }
 
 
 /* =========================================================
-   BASIC ELEMENTS
+   INVITE MODAL
    ========================================================= */
 
-const usernameDisplay =
-    document.getElementById("usernameDisplay");
+function openInvite() {
 
-const logoutButton =
-    document.getElementById("logoutButton");
+    inviteOverlay.classList.add("show");
 
-const connectionDot =
-    document.getElementById("connectionDot");
+    inviteName.value = username;
+    inviteCodeInput.value = inviteCode;
 
-const connectionText =
-    document.getElementById("connectionText");
+    inviteError.textContent = "";
 
-const sakuraContainer =
-    document.getElementById("sakuraContainer");
-
-
-/* =========================================================
-   DISPLAY USER
-   ========================================================= */
-
-if (usernameDisplay && currentUser) {
-
-    usernameDisplay.textContent =
-        currentUser;
+    setTimeout(() => {
+        inviteName.focus();
+    }, 100);
 }
 
 
+function closeInvite() {
+
+    inviteOverlay.classList.remove("show");
+}
+
+
+inviteButton.addEventListener(
+    "click",
+    openInvite
+);
+
+closeInviteButton.addEventListener(
+    "click",
+    closeInvite
+);
+
+
+inviteOverlay.addEventListener(
+    "click",
+    event => {
+
+        if (event.target === inviteOverlay) {
+            closeInvite();
+        }
+
+    }
+);
+
+
 /* =========================================================
-   ROOM
+   JOIN
    ========================================================= */
 
-let roomCode =
-    localStorage.getItem("usspace_room");
+joinSpaceButton.addEventListener(
+    "click",
+    joinSpace
+);
 
-if (!roomCode) {
 
-    roomCode =
-        Math.floor(
-            1000 +
-            Math.random() * 9000
-        ).toString();
+inviteCodeInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+            joinSpace();
+        }
+
+    }
+);
+
+
+function joinSpace() {
+
+    const name =
+        inviteName.value.trim();
+
+    const code =
+        inviteCodeInput.value
+            .trim()
+            .replace(/\s+/g, "")
+            .toUpperCase();
+
+
+    inviteError.textContent = "";
+
+
+    if (!name) {
+
+        inviteError.textContent =
+            "Please enter your name.";
+
+        inviteName.focus();
+
+        return;
+    }
+
+
+    if (name.length < 2) {
+
+        inviteError.textContent =
+            "Name is too short.";
+
+        return;
+    }
+
+
+    if (!code) {
+
+        inviteError.textContent =
+            "Please enter the invite code.";
+
+        inviteCodeInput.focus();
+
+        return;
+    }
+
+
+    if (code.length < 4) {
+
+        inviteError.textContent =
+            "Invite code is too short.";
+
+        return;
+    }
+
+
+    username = name;
+    inviteCode = code;
+
 
     localStorage.setItem(
-        "usspace_room",
-        roomCode
+        "usspace_username",
+        username
     );
+
+    localStorage.setItem(
+        "usspace_invite_code",
+        inviteCode
+    );
+
+
+    usernameDisplay.textContent =
+        username;
+
+
+    roomDisplay.textContent =
+        "US-" + inviteCode;
+
+
+    roomStatus.textContent =
+        "Connecting to private space...";
+
+
+    joinSpaceButton.disabled = true;
+
+    joinSpaceButton.textContent =
+        "🌸 Joining...";
+
+
+    /*
+       SERVER EVENT
+
+       server.js should listen for:
+       "join-space"
+
+       and return:
+       "space-joined"
+       OR
+       "space-error"
+    */
+
+    socket.emit(
+        "join-space",
+        {
+            username: username,
+            inviteCode: inviteCode
+        }
+    );
+
 }
 
 
 /* =========================================================
-   SOCKET.IO
+   SOCKET CONNECTION
    ========================================================= */
 
-let socket = null;
+socket.on(
+    "connect",
+    () => {
 
-try {
+        connectionDot.classList.add(
+            "connected"
+        );
 
-    if (
-        typeof io === "function"
-    ) {
-
-        socket = io();
-
-    }
-
-} catch (error) {
-
-    console.log(
-        "Socket connection unavailable:",
-        error
-    );
-}
+        connectionText.textContent =
+            "Connected";
 
 
-/* =========================================================
-   CONNECTION STATUS
-   ========================================================= */
-
-function setConnectionStatus(
-    status,
-    text
-) {
-
-    if (connectionText) {
-        connectionText.textContent = text;
-    }
-
-    if (!connectionDot) return;
-
-
-    connectionDot.classList.remove(
-        "connected",
-        "connecting",
-        "offline"
-    );
-
-
-    connectionDot.classList.add(
-        status
-    );
-}
-
-
-if (socket) {
-
-    setConnectionStatus(
-        "connecting",
-        "Connecting..."
-    );
-
-
-    socket.on(
-        "connect",
-        () => {
-
-            setConnectionStatus(
-                "connected",
-                "Connected"
-            );
-
+        if (
+            username &&
+            inviteCode &&
+            !roomJoined
+        ) {
 
             socket.emit(
-                "join-room",
+                "join-space",
                 {
-                    room: roomCode,
-                    username: currentUser
+                    username,
+                    inviteCode
                 }
             );
+
         }
-    );
+
+    }
+);
 
 
-    socket.on(
-        "disconnect",
-        () => {
+socket.on(
+    "disconnect",
+    () => {
 
-            setConnectionStatus(
-                "offline",
-                "Offline"
+        connectionDot.classList.remove(
+            "connected"
+        );
+
+        connectionText.textContent =
+            "Offline";
+
+        roomStatus.textContent =
+            "Connection lost.";
+
+        partnerStatus.textContent =
+            "Waiting to join";
+
+    }
+);
+
+
+/* =========================================================
+   SPACE JOINED
+   ========================================================= */
+
+socket.on(
+    "space-joined",
+    data => {
+
+        roomJoined = true;
+
+
+        joinSpaceButton.disabled = false;
+
+        joinSpaceButton.textContent =
+            "🌸 Joined";
+
+
+        closeInvite();
+
+
+        roomStatus.textContent =
+            "Private space connected ♡";
+
+
+        if (data && data.partner) {
+
+            partnerStatus.textContent =
+                data.partner + " is here ♡";
+
+        } else {
+
+            partnerStatus.textContent =
+                "Waiting for partner";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SPACE ERROR
+   ========================================================= */
+
+socket.on(
+    "space-error",
+    message => {
+
+        roomJoined = false;
+
+
+        joinSpaceButton.disabled = false;
+
+        joinSpaceButton.textContent =
+            "🌸 Join Space";
+
+
+        inviteError.textContent =
+            message ||
+            "Unable to join this space.";
+
+        roomStatus.textContent =
+            "Could not join space.";
+
+    }
+);
+
+
+/* =========================================================
+   PARTNER JOIN
+   ========================================================= */
+
+socket.on(
+    "partner-joined",
+    data => {
+
+        const name =
+            data?.username ||
+            "Partner";
+
+
+        partnerStatus.textContent =
+            name + " is here ♡";
+
+
+        roomStatus.textContent =
+            "Both of you are together 🌸";
+
+
+        systemMessage(
+            name + " joined your space 🌸"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PARTNER LEFT
+   ========================================================= */
+
+socket.on(
+    "partner-left",
+    () => {
+
+        partnerStatus.textContent =
+            "Waiting to join";
+
+        roomStatus.textContent =
+            "Waiting for partner";
+
+        systemMessage(
+            "Your partner left the space."
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+$("chatForm").addEventListener(
+    "submit",
+    event => {
+
+        event.preventDefault();
+
+
+        const input = $("chatInput");
+
+        const message =
+            input.value.trim();
+
+
+        if (!message) {
+            return;
+        }
+
+
+        if (!roomJoined) {
+
+            systemMessage(
+                "Join your private space first 🌸"
             );
+
+            return;
         }
-    );
 
 
-    socket.on(
-        "connect_error",
-        () => {
+        socket.emit(
+            "chat-message",
+            {
+                message
+            }
+        );
 
-            setConnectionStatus(
-                "offline",
-                "Server unavailable"
-            );
+
+        input.value = "";
+
+    }
+);
+
+
+socket.on(
+    "chat-message",
+    data => {
+
+        if (!data) {
+            return;
         }
-    );
 
-} else {
 
-    setConnectionStatus(
-        "offline",
-        "Offline"
-    );
+        addMessage(
+            data.username || "Partner",
+            data.message || "",
+            data.username === username
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CHAT UI
+   ========================================================= */
+
+function addMessage(
+    sender,
+    message,
+    mine
+) {
+
+    const messages =
+        $("chatMessages");
+
+
+    $("emptyChat")?.remove();
+
+
+    const bubble =
+        document.createElement("div");
+
+
+    bubble.className =
+        mine
+            ? "chat-bubble mine"
+            : "chat-bubble partner";
+
+
+    const name =
+        document.createElement("small");
+
+
+    name.textContent =
+        mine
+            ? "You"
+            : sender;
+
+
+    const text =
+        document.createElement("p");
+
+
+    text.textContent =
+        message;
+
+
+    bubble.appendChild(name);
+
+    bubble.appendChild(text);
+
+
+    messages.appendChild(bubble);
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+function systemMessage(message) {
+
+    const messages =
+        $("chatMessages");
+
+
+    $("emptyChat")?.remove();
+
+
+    const item =
+        document.createElement("div");
+
+
+    item.style.textAlign = "center";
+    item.style.padding = "8px";
+    item.style.fontSize = "7px";
+    item.style.color = "#a48791";
+
+
+    item.textContent =
+        message;
+
+
+    messages.appendChild(item);
+
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
 }
 
 
@@ -197,1049 +575,235 @@ if (socket) {
    LOGOUT
    ========================================================= */
 
-if (logoutButton) {
+logoutButton.addEventListener(
+    "click",
+    () => {
 
-    logoutButton.addEventListener(
-        "click",
-        () => {
+        localStorage.removeItem(
+            "usspace_username"
+        );
 
-            localStorage.removeItem(
-                "usspace_logged_in"
-            );
-
-            localStorage.removeItem(
-                "usspace_user"
-            );
-
-            /*
-               Keep room code so the same
-               private space can be reused.
-            */
-
-            document.body.style.transition =
-                "opacity .3s ease";
-
-            document.body.style.opacity =
-                "0";
+        localStorage.removeItem(
+            "usspace_invite_code"
+        );
 
 
-            setTimeout(
-                () => {
+        socket.disconnect();
 
-                    window.location.replace(
-                        "index.html"
-                    );
 
-                },
-                300
-            );
-        }
-    );
-}
+        window.location.href =
+            "index.html";
+
+    }
+);
 
 
 /* =========================================================
    CAMERA
    ========================================================= */
 
-const localVideo =
-    document.getElementById("localVideo");
-
-const localPlaceholder =
-    document.getElementById(
-        "localPlaceholder"
-    );
-
-const cameraButton =
-    document.getElementById(
-        "cameraButton"
-    );
-
-const switchCameraButton =
-    document.getElementById(
-        "switchCameraButton"
-    );
-
-const cameraStatus =
-    document.getElementById(
-        "cameraStatus"
-    );
-
-
 let localStream = null;
 
-let cameraEnabled = false;
-
-let currentFacingMode = "user";
+let facingMode = "user";
 
 
-/* =========================================================
-   CAMERA STATUS
-   ========================================================= */
-
-function updateCameraUI() {
-
-    if (!localPlaceholder) return;
-
-
-    if (cameraEnabled) {
-
-        localPlaceholder.style.opacity =
-            "0";
-
-        localPlaceholder.style.pointerEvents =
-            "none";
-
-        if (cameraButton) {
-            cameraButton.textContent =
-                "📷";
-        }
-
-        if (cameraStatus) {
-            cameraStatus.textContent =
-                "Camera ON";
-        }
-
-    } else {
-
-        localPlaceholder.style.opacity =
-            "1";
-
-        localPlaceholder.style.pointerEvents =
-            "auto";
-
-        if (cameraButton) {
-            cameraButton.textContent =
-                "📷";
-        }
-
-        if (cameraStatus) {
-            cameraStatus.textContent =
-                "Camera OFF";
-        }
-    }
-}
-
-
-/* =========================================================
-   START CAMERA
-   ========================================================= */
-
-async function startCamera() {
-
-    if (
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-    ) {
-
-        if (cameraStatus) {
-            cameraStatus.textContent =
-                "Camera not supported";
-        }
-
-        return;
-    }
-
-
-    try {
+$("cameraButton").addEventListener(
+    "click",
+    async () => {
 
         if (localStream) {
 
             localStream
                 .getTracks()
-                .forEach(
-                    track => track.stop()
-                );
+                .forEach(track => track.stop());
+
+
+            localStream = null;
+
+            $("localVideo").srcObject =
+                null;
+
+            $("localPlaceholder").style.display =
+                "flex";
+
+            $("cameraStatus").textContent =
+                "Camera off";
+
+            return;
         }
 
 
-        localStream =
-            await navigator.mediaDevices.getUserMedia(
-                {
-                    video: {
-                        facingMode:
-                            currentFacingMode
-                    },
+        try {
 
-                    audio: false
-                }
-            );
+            localStream =
+                await navigator.mediaDevices
+                    .getUserMedia({
+                        video: {
+                            facingMode
+                        },
+                        audio: false
+                    });
 
 
-        if (localVideo) {
-
-            localVideo.srcObject =
+            $("localVideo").srcObject =
                 localStream;
+
+
+            $("localPlaceholder").style.display =
+                "none";
+
+
+            $("cameraStatus").textContent =
+                "Camera on ♡";
+
+        } catch (error) {
+
+            $("cameraStatus").textContent =
+                "Camera permission denied";
+
         }
 
-
-        cameraEnabled = true;
-
-        updateCameraUI();
-
-
-        if (socket) {
-
-            socket.emit(
-                "camera-state",
-                {
-                    room: roomCode,
-                    username: currentUser,
-                    enabled: true
-                }
-            );
-        }
-
-    } catch (error) {
-
-        console.log(
-            "Camera error:",
-            error
-        );
-
-
-        cameraEnabled = false;
-
-        updateCameraUI();
-
-
-        if (cameraStatus) {
-
-            if (
-                error.name ===
-                "NotAllowedError"
-            ) {
-
-                cameraStatus.textContent =
-                    "Camera permission denied";
-
-            } else {
-
-                cameraStatus.textContent =
-                    "Unable to open camera";
-            }
-        }
     }
-}
-
-
-/* =========================================================
-   STOP CAMERA
-   ========================================================= */
-
-function stopCamera() {
-
-    if (!localStream) return;
-
-
-    localStream
-        .getVideoTracks()
-        .forEach(
-            track => {
-                track.enabled = false;
-            }
-        );
-
-
-    cameraEnabled = false;
-
-    updateCameraUI();
-
-
-    if (socket) {
-
-        socket.emit(
-            "camera-state",
-            {
-                room: roomCode,
-                username: currentUser,
-                enabled: false
-            }
-        );
-    }
-}
-
-
-/* =========================================================
-   CAMERA ON / OFF
-   ========================================================= */
-
-if (cameraButton) {
-
-    cameraButton.addEventListener(
-        "click",
-        async () => {
-
-            if (!localStream) {
-
-                await startCamera();
-
-                return;
-            }
-
-
-            const videoTracks =
-                localStream.getVideoTracks();
-
-
-            if (!videoTracks.length) {
-
-                await startCamera();
-
-                return;
-            }
-
-
-            cameraEnabled =
-                !cameraEnabled;
-
-
-            videoTracks.forEach(
-                track => {
-                    track.enabled =
-                        cameraEnabled;
-                }
-            );
-
-
-            updateCameraUI();
-
-
-            if (socket) {
-
-                socket.emit(
-                    "camera-state",
-                    {
-                        room: roomCode,
-                        username: currentUser,
-                        enabled:
-                            cameraEnabled
-                    }
-                );
-            }
-        }
-    );
-}
+);
 
 
 /* =========================================================
    SWITCH CAMERA
    ========================================================= */
 
-if (switchCameraButton) {
+$("switchCameraButton").addEventListener(
+    "click",
+    async () => {
 
-    switchCameraButton.addEventListener(
-        "click",
-        async () => {
-
-            currentFacingMode =
-                currentFacingMode === "user"
-                    ? "environment"
-                    : "user";
-
-
-            await startCamera();
+        if (!localStream) {
+            return;
         }
-    );
-}
 
 
-/* =========================================================
-   CHAT
-   ========================================================= */
-
-const chatForm =
-    document.getElementById("chatForm");
-
-const chatInput =
-    document.getElementById("chatInput");
-
-const chatMessages =
-    document.getElementById("chatMessages");
-
-const emptyChat =
-    document.getElementById("emptyChat");
+        facingMode =
+            facingMode === "user"
+                ? "environment"
+                : "user";
 
 
-/* =========================================================
-   ADD MESSAGE
-   ========================================================= */
-
-function addMessage(
-    username,
-    message,
-    mine = false
-) {
-
-    if (!chatMessages) return;
+        localStream
+            .getTracks()
+            .forEach(track => track.stop());
 
 
-    if (emptyChat) {
-        emptyChat.remove();
+        try {
+
+            localStream =
+                await navigator.mediaDevices
+                    .getUserMedia({
+                        video: {
+                            facingMode
+                        },
+                        audio: false
+                    });
+
+
+            $("localVideo").srcObject =
+                localStream;
+
+        } catch (error) {
+
+            $("cameraStatus").textContent =
+                "Could not switch camera";
+
+        }
+
     }
-
-
-    const messageElement =
-        document.createElement("div");
-
-
-    messageElement.className =
-        "chat-message" +
-        (mine ? " mine" : "");
-
-
-    const sender =
-        document.createElement("small");
-
-    sender.textContent =
-        mine
-            ? "YOU"
-            : username;
-
-
-    const text =
-        document.createElement("span");
-
-    text.textContent =
-        message;
-
-
-    messageElement.appendChild(
-        sender
-    );
-
-    messageElement.appendChild(
-        text
-    );
-
-
-    chatMessages.appendChild(
-        messageElement
-    );
-
-
-    chatMessages.scrollTo(
-        {
-            top:
-                chatMessages.scrollHeight,
-
-            behavior:
-                "smooth"
-        }
-    );
-}
+);
 
 
 /* =========================================================
-   SEND CHAT
+   WEATHER LOCATION
    ========================================================= */
 
-if (chatForm) {
+$("shareWeatherButton").addEventListener(
+    "click",
+    () => {
 
-    chatForm.addEventListener(
-        "submit",
-        event => {
+        if (!navigator.geolocation) {
 
-            event.preventDefault();
+            $("myWeatherLocation").textContent =
+                "Location unavailable";
 
-
-            if (!chatInput) return;
-
-
-            const message =
-                chatInput.value.trim();
+            return;
+        }
 
 
-            if (!message) return;
+        $("shareWeatherButton").textContent =
+            "📍 Getting location...";
 
 
-            /*
-               Maximum 500 characters.
-            */
+        navigator.geolocation.getCurrentPosition(
+            position => {
 
-            const cleanMessage =
-                message.slice(0, 500);
+                const location = {
+                    latitude:
+                        position.coords.latitude,
 
+                    longitude:
+                        position.coords.longitude
+                };
 
-            if (socket) {
 
                 socket.emit(
-                    "chat-message",
-                    {
-                        room: roomCode,
-                        username: currentUser,
-                        message:
-                            cleanMessage
-                    }
-                );
-
-            } else {
-
-                /*
-                   Local fallback so the UI
-                   still works without server.
-                */
-
-                addMessage(
-                    currentUser,
-                    cleanMessage,
-                    true
-                );
-            }
-
-
-            chatInput.value = "";
-
-            chatInput.focus();
-        }
-    );
-}
-
-
-/* =========================================================
-   RECEIVE CHAT
-   ========================================================= */
-
-if (socket) {
-
-    socket.on(
-        "chat-message",
-        data => {
-
-            if (!data) return;
-
-
-            const isMine =
-                data.username ===
-                currentUser;
-
-
-            addMessage(
-                data.username ||
-                    "Partner",
-
-                data.message ||
-                    "",
-
-                isMine
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   PARTNER CAMERA STATUS
-   ========================================================= */
-
-const partnerStatus =
-    document.getElementById(
-        "partnerStatus"
-    );
-
-const remotePlaceholder =
-    document.getElementById(
-        "remotePlaceholder"
-    );
-
-
-if (socket) {
-
-    socket.on(
-        "partner-camera-state",
-        data => {
-
-            if (!data) return;
-
-
-            if (data.enabled) {
-
-                if (partnerStatus) {
-
-                    partnerStatus.textContent =
-                        "Camera on";
-                }
-
-            } else {
-
-                if (partnerStatus) {
-
-                    partnerStatus.textContent =
-                        "Camera off";
-                }
-            }
-        }
-    );
-
-
-    socket.on(
-        "partner-joined",
-        data => {
-
-            if (partnerStatus) {
-
-                partnerStatus.textContent =
-                    "Partner is here 🌸";
-            }
-
-
-            showBlossomNotification(
-                "Your partner joined 🌸"
-            );
-        }
-    );
-
-
-    socket.on(
-        "partner-left",
-        () => {
-
-            if (partnerStatus) {
-
-                partnerStatus.textContent =
-                    "Waiting to join";
-            }
-
-
-            showBlossomNotification(
-                "Partner left the space"
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   WEATHER
-   ========================================================= */
-
-const shareWeatherButton =
-    document.getElementById(
-        "shareWeatherButton"
-    );
-
-const myWeatherIcon =
-    document.getElementById(
-        "myWeatherIcon"
-    );
-
-const myTemperature =
-    document.getElementById(
-        "myTemperature"
-    );
-
-const myWeatherLocation =
-    document.getElementById(
-        "myWeatherLocation"
-    );
-
-
-const partnerWeatherIcon =
-    document.getElementById(
-        "partnerWeatherIcon"
-    );
-
-const partnerTemperature =
-    document.getElementById(
-        "partnerTemperature"
-    );
-
-const partnerWeatherLocation =
-    document.getElementById(
-        "partnerWeatherLocation"
-    );
-
-
-/* =========================================================
-   WEATHER ICON
-   ========================================================= */
-
-function weatherIcon(code) {
-
-    if (code === 0) {
-        return "☀️";
-    }
-
-    if (
-        code >= 1 &&
-        code <= 3
-    ) {
-        return "🌤️";
-    }
-
-    if (
-        code >= 45 &&
-        code <= 48
-    ) {
-        return "🌫️";
-    }
-
-    if (
-        code >= 51 &&
-        code <= 67
-    ) {
-        return "🌧️";
-    }
-
-    if (
-        code >= 71 &&
-        code <= 77
-    ) {
-        return "❄️";
-    }
-
-    if (
-        code >= 80 &&
-        code <= 82
-    ) {
-        return "🌦️";
-    }
-
-    if (
-        code >= 95
-    ) {
-        return "⛈️";
-    }
-
-    return "🌸";
-}
-
-
-/* =========================================================
-   SHARE WEATHER
-   ========================================================= */
-
-async function shareWeather() {
-
-    if (!navigator.geolocation) {
-
-        if (myWeatherLocation) {
-
-            myWeatherLocation.textContent =
-                "Location unavailable";
-        }
-
-        return;
-    }
-
-
-    if (shareWeatherButton) {
-
-        shareWeatherButton.disabled =
-            true;
-
-        shareWeatherButton.textContent =
-            "🌤️ Getting weather...";
-    }
-
-
-    navigator.geolocation.getCurrentPosition(
-        async position => {
-
-            const latitude =
-                position.coords.latitude;
-
-            const longitude =
-                position.coords.longitude;
-
-
-            try {
-
-                const url =
-                    "https://api.open-meteo.com/v1/forecast" +
-                    `?latitude=${latitude}` +
-                    `&longitude=${longitude}` +
-                    "&current=temperature_2m,weather_code" +
-                    "&timezone=auto";
-
-
-                const response =
-                    await fetch(url);
-
-
-                if (!response.ok) {
-                    throw new Error(
-                        "Weather request failed"
-                    );
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const temperature =
-                    Math.round(
-                        data.current.temperature_2m
-                    );
-
-
-                const code =
-                    data.current.weather_code;
-
-
-                const icon =
-                    weatherIcon(code);
-
-
-                if (myWeatherIcon) {
-                    myWeatherIcon.textContent =
-                        icon;
-                }
-
-
-                if (myTemperature) {
-
-                    myTemperature.textContent =
-                        `${temperature}°C`;
-                }
-
-
-                if (myWeatherLocation) {
-
-                    myWeatherLocation.textContent =
-                        "Shared from your location";
-                }
-
-
-                if (socket) {
-
-                    socket.emit(
-                        "weather-share",
-                        {
-                            room: roomCode,
-                            username: currentUser,
-                            temperature,
-                            code,
-                            icon
-                        }
-                    );
-                }
-
-
-                if (shareWeatherButton) {
-
-                    shareWeatherButton.textContent =
-                        "✓ Weather Shared";
-                }
-
-            } catch (error) {
-
-                console.log(
-                    "Weather error:",
-                    error
+                    "share-location",
+                    location
                 );
 
 
-                if (myWeatherLocation) {
-
-                    myWeatherLocation.textContent =
-                        "Weather unavailable";
-                }
+                $("myWeatherLocation").textContent =
+                    "Location shared";
 
 
-                if (shareWeatherButton) {
+                $("shareWeatherButton").textContent =
+                    "🌤️ Weather Shared";
 
-                    shareWeatherButton.textContent =
-                        "🌤️ Try Again";
-                }
+            },
 
-            } finally {
+            () => {
 
-                if (shareWeatherButton) {
+                $("shareWeatherButton").textContent =
+                    "🌤️ Share My Weather";
 
-                    shareWeatherButton.disabled =
-                        false;
-                }
+                $("myWeatherLocation").textContent =
+                    "Permission denied";
+
             }
-        },
+        );
 
-        error => {
-
-            console.log(
-                "Location error:",
-                error
-            );
-
-
-            if (myWeatherLocation) {
-
-                myWeatherLocation.textContent =
-                    "Location permission needed";
-            }
-
-
-            if (shareWeatherButton) {
-
-                shareWeatherButton.disabled =
-                    false;
-
-                shareWeatherButton.textContent =
-                    "🌤️ Try Again";
-            }
-        },
-
-        {
-            enableHighAccuracy: false,
-
-            timeout: 10000,
-
-            maximumAge: 300000
-        }
-    );
-}
-
-
-if (shareWeatherButton) {
-
-    shareWeatherButton.addEventListener(
-        "click",
-        shareWeather
-    );
-}
+    }
+);
 
 
 /* =========================================================
-   RECEIVE PARTNER WEATHER
+   PARTNER LOCATION
    ========================================================= */
 
-if (socket) {
+socket.on(
+    "partner-location",
+    () => {
 
-    socket.on(
-        "weather-share",
-        data => {
+        $("partnerWeatherLocation").textContent =
+            "Location shared";
 
-            if (!data) return;
-
-
-            if (partnerWeatherIcon) {
-
-                partnerWeatherIcon.textContent =
-                    data.icon ||
-                    weatherIcon(
-                        data.code
-                    );
-            }
-
-
-            if (partnerTemperature) {
-
-                partnerTemperature.textContent =
-                    `${data.temperature}°C`;
-            }
-
-
-            if (partnerWeatherLocation) {
-
-                partnerWeatherLocation.textContent =
-                    "Shared by partner";
-            }
-
-
-            showBlossomNotification(
-                "Partner shared their weather 🌤️"
-            );
-        }
-    );
-}
+    }
+);
 
 
 /* =========================================================
-   TAKE A BREAK
+   SAKURA
    ========================================================= */
 
-const breakButton =
-    document.getElementById(
-        "breakButton"
-    );
+const sakura =
+    $("sakuraContainer");
 
-const breakOverlay =
-    document.getElementById(
-        "breakOverlay"
-    );
-
-const closeBreakButton =
-    document.getElementById(
-        "closeBreakButton"
-    );
-
-
-function openBreak() {
-
-    if (!breakOverlay) return;
-
-
-    breakOverlay.classList.add(
-        "active"
-    );
-
-    breakOverlay.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-}
-
-
-function closeBreak() {
-
-    if (!breakOverlay) return;
-
-
-    breakOverlay.classList.remove(
-        "active"
-    );
-
-    breakOverlay.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-}
-
-
-if (breakButton) {
-
-    breakButton.addEventListener(
-        "click",
-        openBreak
-    );
-}
-
-
-if (closeBreakButton) {
-
-    closeBreakButton.addEventListener(
-        "click",
-        closeBreak
-    );
-}
-
-
-if (breakOverlay) {
-
-    breakOverlay.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target ===
-                breakOverlay
-            ) {
-
-                closeBreak();
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   SAKURA PETALS
-   ========================================================= */
 
 function createPetal() {
-
-    if (!sakuraContainer) return;
-
 
     const petal =
         document.createElement("span");
@@ -1250,209 +814,57 @@ function createPetal() {
 
 
     petal.style.left =
-        Math.random() * 100 + "vw";
+        Math.random() * 100 + "%";
 
 
-    const size =
-        7 + Math.random() * 9;
-
-
-    petal.style.width =
-        `${size}px`;
-
-
-    petal.style.height =
-        `${size * .7}px`;
-
-
-    petal.style.opacity =
-        .25 +
-        Math.random() * .4;
-
-
-    const duration =
-        7 +
-        Math.random() * 7;
+    petal.style.setProperty(
+        "--drift",
+        `${Math.random() * 160 - 80}px`
+    );
 
 
     petal.style.animationDuration =
-        `${duration}s`;
+        `${6 + Math.random() * 7}s`;
 
 
-    petal.style.animationDelay =
-        `${Math.random() * 1.5}s`;
+    const size =
+        7 + Math.random() * 6;
 
 
-    sakuraContainer.appendChild(
-        petal
-    );
+    petal.style.width =
+        size + "px";
+
+
+    petal.style.height =
+        size * .7 + "px";
+
+
+    sakura.appendChild(petal);
 
 
     setTimeout(
         () => petal.remove(),
-        (duration + 2) * 1000
+        15000
     );
-}
 
-
-for (
-    let i = 0;
-    i < 15;
-    i++
-) {
-
-    setTimeout(
-        createPetal,
-        i * 180
-    );
 }
 
 
 setInterval(
     createPetal,
-    900
+    500
 );
 
 
-/* =========================================================
-   BLOSSOM NOTIFICATION
-   ========================================================= */
-
-function showBlossomNotification(
-    message
+for (
+    let i = 0;
+    i < 10;
+    i++
 ) {
 
-    const old =
-        document.querySelector(
-            ".blossom-notification"
-        );
-
-
-    if (old) {
-        old.remove();
-    }
-
-
-    const notification =
-        document.createElement("div");
-
-
-    notification.className =
-        "blossom-notification";
-
-
-    notification.textContent =
-        message;
-
-
-    notification.style.cssText = `
-        position: fixed;
-        top: 76px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-15px);
-        z-index: 200;
-        padding: 11px 16px;
-        border-radius: 18px;
-        background: rgba(255,255,255,.92);
-        border: 1px solid rgba(238,190,207,.65);
-        box-shadow: 0 15px 35px rgba(170,80,115,.16);
-        color: #73495a;
-        font-size: 10px;
-        font-weight: 800;
-        backdrop-filter: blur(15px);
-        opacity: 0;
-        transition: opacity .3s ease, transform .3s ease;
-    `;
-
-
-    document.body.appendChild(
-        notification
-    );
-
-
-    requestAnimationFrame(
-        () => {
-
-            notification.style.opacity =
-                "1";
-
-            notification.style.transform =
-                "translateX(-50%) translateY(0)";
-        }
-    );
-
-
     setTimeout(
-        () => {
-
-            notification.style.opacity =
-                "0";
-
-            notification.style.transform =
-                "translateX(-50%) translateY(-10px)";
-
-
-            setTimeout(
-                () => notification.remove(),
-                350
-            );
-
-        },
-        2800
+        createPetal,
+        i * 250
     );
+
 }
-
-
-/* =========================================================
-   PAGE VISIBILITY
-   ========================================================= */
-
-document.addEventListener(
-    "visibilitychange",
-    () => {
-
-        if (
-            document.hidden &&
-            localStream
-        ) {
-
-            /*
-               Keep camera state controlled
-               by the user. We don't secretly
-               turn it off.
-            */
-        }
-    }
-);
-
-
-/* =========================================================
-   PAGE EXIT
-   ========================================================= */
-
-window.addEventListener(
-    "beforeunload",
-    () => {
-
-        if (localStream) {
-
-            localStream
-                .getTracks()
-                .forEach(
-                    track => track.stop()
-                );
-        }
-    }
-);
-
-
-/* =========================================================
-   INITIAL UI
-   ========================================================= */
-
-updateCameraUI();
-
-console.log(
-    "USSPACE Home loaded for:",
-    currentUser
-);
