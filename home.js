@@ -1,238 +1,236 @@
 /* =========================================================
    USSPACE • HOME.JS
+   Invite + Join + Chat + Camera + Socket.IO
    ========================================================= */
 
-const socket = io(window.location.origin);
-let username =
-    localStorage.getItem("usspace_username") || "";
-
-let inviteCode =
-    localStorage.getItem("usspace_invite_code") || "";
-
-let roomJoined = false;
+"use strict";
 
 
 /* =========================================================
-   ELEMENTS
+   SOCKET.IO
    ========================================================= */
 
-const $ = id => document.getElementById(id);
+let socket = null;
 
-const connectionDot = $("connectionDot");
-const connectionText = $("connectionText");
+if (typeof io === "function") {
 
-const usernameDisplay = $("usernameDisplay");
+    socket = io();
 
-const roomDisplay = $("roomDisplay");
-const roomStatus = $("roomStatus");
+} else {
 
-const partnerStatus = $("partnerStatus");
+    console.error(
+        "❌ Socket.IO load nahi hua."
+    );
 
-const inviteOverlay = $("inviteOverlay");
-const inviteButton = $("inviteButton");
-const closeInviteButton = $("closeInviteButton");
-
-const inviteName = $("inviteName");
-const inviteCodeInput = $("inviteCode");
-
-const inviteError = $("inviteError");
-const joinSpaceButton = $("joinSpaceButton");
-
-const logoutButton = $("logoutButton");
+}
 
 
 /* =========================================================
-   INITIAL USER
+   USER
    ========================================================= */
 
-if (username) {
+const username =
+    localStorage.getItem("usspace_username") ||
+    localStorage.getItem("username") ||
+    "You";
+
+
+const usernameDisplay =
+    document.getElementById(
+        "usernameDisplay"
+    );
+
+
+if (usernameDisplay) {
     usernameDisplay.textContent = username;
 }
 
-if (inviteCode) {
-    roomDisplay.textContent =
-        "US-" + inviteCode.toUpperCase();
-
-    roomStatus.textContent =
-        "Private room";
-}
-
 
 /* =========================================================
-   INVITE MODAL
+   INVITE CODE
    ========================================================= */
 
-function openInvite() {
+function generateInviteCode() {
 
-    inviteOverlay.classList.add("show");
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-    inviteName.value = username;
-    inviteCodeInput.value = inviteCode;
+    let code = "";
 
-    inviteError.textContent = "";
+    for (let i = 0; i < 6; i++) {
 
-    setTimeout(() => {
-        inviteName.focus();
-    }, 100);
+        code +=
+            chars.charAt(
+                Math.floor(
+                    Math.random() *
+                    chars.length
+                )
+            );
+
+    }
+
+    return code;
 }
 
 
-function closeInvite() {
+/* Get existing code or create new one */
 
-    inviteOverlay.classList.remove("show");
-}
-
-
-inviteButton.addEventListener(
-    "click",
-    openInvite
-);
-
-closeInviteButton.addEventListener(
-    "click",
-    closeInvite
-);
-
-
-inviteOverlay.addEventListener(
-    "click",
-    event => {
-
-        if (event.target === inviteOverlay) {
-            closeInvite();
-        }
-
-    }
-);
-
-
-/* =========================================================
-   JOIN
-   ========================================================= */
-
-joinSpaceButton.addEventListener(
-    "click",
-    joinSpace
-);
-
-
-inviteCodeInput.addEventListener(
-    "keydown",
-    event => {
-
-        if (event.key === "Enter") {
-            joinSpace();
-        }
-
-    }
-);
-
-
-function joinSpace() {
-
-    const name =
-        inviteName.value.trim();
-
-    const code =
-        inviteCodeInput.value
-            .trim()
-            .replace(/\s+/g, "")
-            .toUpperCase();
-
-
-    inviteError.textContent = "";
-
-
-    if (!name) {
-
-        inviteError.textContent =
-            "Please enter your name.";
-
-        inviteName.focus();
-
-        return;
-    }
-
-
-    if (name.length < 2) {
-
-        inviteError.textContent =
-            "Name is too short.";
-
-        return;
-    }
-
-
-    if (!code) {
-
-        inviteError.textContent =
-            "Please enter the invite code.";
-
-        inviteCodeInput.focus();
-
-        return;
-    }
-
-
-    if (code.length < 4) {
-
-        inviteError.textContent =
-            "Invite code is too short.";
-
-        return;
-    }
-
-
-    username = name;
-    inviteCode = code;
-
-
-    localStorage.setItem(
-        "usspace_username",
-        username
+let inviteCode =
+    localStorage.getItem(
+        "usspace_invite_code"
     );
+
+
+if (
+    !inviteCode ||
+    inviteCode.length !== 6
+) {
+
+    inviteCode =
+        generateInviteCode();
 
     localStorage.setItem(
         "usspace_invite_code",
         inviteCode
     );
 
-
-    usernameDisplay.textContent =
-        username;
+}
 
 
-    roomDisplay.textContent =
-        "US-" + inviteCode;
+/* =========================================================
+   INVITE ELEMENTS
+   ========================================================= */
+
+const inviteCodeDisplay =
+    document.getElementById(
+        "inviteCodeDisplay"
+    );
 
 
-    roomStatus.textContent =
-        "Connecting to private space...";
+const modalInviteCode =
+    document.getElementById(
+        "modalInviteCode"
+    );
 
 
-    joinSpaceButton.disabled = true;
+function showInviteCode() {
 
-    joinSpaceButton.textContent =
-        "🌸 Joining...";
+    if (inviteCodeDisplay) {
+
+        inviteCodeDisplay.textContent =
+            inviteCode;
+
+    }
 
 
-    /*
-       SERVER EVENT
+    if (modalInviteCode) {
 
-       server.js should listen for:
-       "join-space"
+        modalInviteCode.textContent =
+            inviteCode;
 
-       and return:
-       "space-joined"
-       OR
-       "space-error"
-    */
+    }
 
-    socket.emit(
-        "join-space",
-        {
-            username: username,
-            inviteCode: inviteCode
+}
+
+
+showInviteCode();
+
+
+/* =========================================================
+   INVITE MODAL
+   ========================================================= */
+
+const inviteModal =
+    document.getElementById(
+        "inviteModal"
+    );
+
+
+const openJoinButton =
+    document.getElementById(
+        "openJoinButton"
+    );
+
+
+const closeInviteModal =
+    document.getElementById(
+        "closeInviteModal"
+    );
+
+
+function openInviteModal() {
+
+    if (!inviteModal) {
+        return;
+    }
+
+    showInviteCode();
+
+    inviteModal.classList.add(
+        "show"
+    );
+
+    inviteModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+}
+
+
+function closeInvite() {
+
+    if (!inviteModal) {
+        return;
+    }
+
+    inviteModal.classList.remove(
+        "show"
+    );
+
+    inviteModal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+if (openJoinButton) {
+
+    openJoinButton.addEventListener(
+        "click",
+        openInviteModal
+    );
+
+}
+
+
+if (closeInviteModal) {
+
+    closeInviteModal.addEventListener(
+        "click",
+        closeInvite
+    );
+
+}
+
+
+if (inviteModal) {
+
+    inviteModal.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                inviteModal
+            ) {
+
+                closeInvite();
+
+            }
+
         }
     );
 
@@ -240,333 +238,1017 @@ function joinSpace() {
 
 
 /* =========================================================
-   SOCKET CONNECTION
+   COPY INVITE CODE
    ========================================================= */
 
-socket.on(
-    "connect",
-    () => {
+const copyInviteButton =
+    document.getElementById(
+        "copyInviteButton"
+    );
 
-        connectionDot.classList.add(
-            "connected"
+
+const modalCopyButton =
+    document.getElementById(
+        "modalCopyButton"
+    );
+
+
+const inviteMessage =
+    document.getElementById(
+        "inviteMessage"
+    );
+
+
+async function copyInviteCode() {
+
+    try {
+
+        await navigator.clipboard.writeText(
+            inviteCode
         );
 
-        connectionText.textContent =
-            "Connected";
+        showInviteMessage(
+            "💕 Invite code copied!"
+        );
+
+    } catch (error) {
+
+        const textArea =
+            document.createElement(
+                "textarea"
+            );
+
+        textArea.value =
+            inviteCode;
+
+        document.body.appendChild(
+            textArea
+        );
+
+        textArea.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        textArea.remove();
+
+        showInviteMessage(
+            "💕 Invite code copied!"
+        );
+
+    }
+
+}
 
 
-        if (
-            username &&
-            inviteCode &&
-            !roomJoined
-        ) {
+if (copyInviteButton) {
 
-            socket.emit(
-                "join-space",
-                {
-                    username,
-                    inviteCode
-                }
+    copyInviteButton.addEventListener(
+        "click",
+        copyInviteCode
+    );
+
+}
+
+
+if (modalCopyButton) {
+
+    modalCopyButton.addEventListener(
+        "click",
+        copyInviteCode
+    );
+
+}
+
+
+function showInviteMessage(message) {
+
+    if (!inviteMessage) {
+        return;
+    }
+
+    inviteMessage.textContent =
+        message;
+
+    clearTimeout(
+        window.inviteMessageTimer
+    );
+
+    window.inviteMessageTimer =
+        setTimeout(
+            function () {
+
+                inviteMessage.textContent =
+                    "";
+
+            },
+            2500
+        );
+
+}
+
+
+/* =========================================================
+   JOIN SPACE
+   ========================================================= */
+
+const joinForm =
+    document.getElementById(
+        "joinForm"
+    );
+
+
+const joinCodeInput =
+    document.getElementById(
+        "joinCodeInput"
+    );
+
+
+if (joinCodeInput) {
+
+    joinCodeInput.addEventListener(
+        "input",
+        function () {
+
+            this.value =
+                this.value
+                    .toUpperCase()
+                    .replace(
+                        /[^A-Z0-9]/g,
+                        ""
+                    )
+                    .slice(0, 6);
+
+        }
+    );
+
+}
+
+
+if (joinForm) {
+
+    joinForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+
+            const code =
+                joinCodeInput
+                    ? joinCodeInput.value
+                        .trim()
+                        .toUpperCase()
+                    : "";
+
+
+            if (code.length !== 6) {
+
+                showInviteMessage(
+                    "⚠️ Please enter a 6-character code."
+                );
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "usspace_room",
+                code
+            );
+
+
+            if (socket) {
+
+                socket.emit(
+                    "join-space",
+                    {
+                        name: username,
+                        room: code
+                    }
+                );
+
+            }
+
+
+            showInviteMessage(
+                "🌸 Joining space..."
+            );
+
+
+            setTimeout(
+                function () {
+
+                    closeInvite();
+
+                    updatePartnerStatus(
+                        "Joining space..."
+                    );
+
+                },
+                600
             );
 
         }
+    );
 
-    }
-);
-
-
-socket.on(
-    "disconnect",
-    () => {
-
-        connectionDot.classList.remove(
-            "connected"
-        );
-
-        connectionText.textContent =
-            "Offline";
-
-        roomStatus.textContent =
-            "Connection lost.";
-
-        partnerStatus.textContent =
-            "Waiting to join";
-
-    }
-);
+}
 
 
 /* =========================================================
-   SPACE JOINED
+   ROOM
    ========================================================= */
 
-socket.on(
-    "space-joined",
-    data => {
-
-        roomJoined = true;
-
-
-        joinSpaceButton.disabled = false;
-
-        joinSpaceButton.textContent =
-            "🌸 Joined";
+let room =
+    localStorage.getItem(
+        "usspace_room"
+    );
 
 
-        closeInvite();
+if (!room) {
+
+    room = inviteCode;
+
+    localStorage.setItem(
+        "usspace_room",
+        room
+    );
+
+}
 
 
-        roomStatus.textContent =
-            "Private space connected ♡";
+function joinCurrentRoom() {
+
+    if (!socket) {
+        return;
+    }
 
 
-        if (data && data.partner) {
+    socket.emit(
+        "join-space",
+        {
+            name: username,
+            room: room
+        }
+    );
 
-            partnerStatus.textContent =
-                data.partner + " is here ♡";
+}
 
-        } else {
 
-            partnerStatus.textContent =
-                "Waiting for partner";
+if (socket) {
+
+    socket.on(
+        "connect",
+        function () {
+
+            console.log(
+                "🌸 Socket connected:",
+                socket.id
+            );
+
+            setConnection(
+                true,
+                "Online"
+            );
+
+            joinCurrentRoom();
 
         }
+    );
 
-    }
-);
+
+    socket.on(
+        "disconnect",
+        function () {
+
+            console.log(
+                "❌ Socket disconnected"
+            );
+
+            setConnection(
+                false,
+                "Offline"
+            );
+
+            updatePartnerStatus(
+                "Connection lost"
+            );
+
+        }
+    );
+
+
+    socket.on(
+        "space-joined",
+        function (data) {
+
+            if (data && data.room) {
+
+                room =
+                    data.room;
+
+                localStorage.setItem(
+                    "usspace_room",
+                    room
+                );
+
+            }
+
+            console.log(
+                "💕 Joined space:",
+                room
+            );
+
+        }
+    );
+
+
+    socket.on(
+        "partner-joined",
+        function (data) {
+
+            const partnerName =
+                data &&
+                data.name
+                    ? data.name
+                    : "Partner";
+
+
+            updatePartnerStatus(
+                partnerName +
+                " is here 💕"
+            );
+
+        }
+    );
+
+
+    socket.on(
+        "partner-left",
+        function () {
+
+            updatePartnerStatus(
+                "Waiting to join"
+            );
+
+
+            stopRemoteVideo();
+
+        }
+    );
+
+
+    socket.on(
+        "room-status",
+        function (data) {
+
+            const count =
+                data &&
+                typeof data.count === "number"
+                    ? data.count
+                    : 1;
+
+
+            if (count >= 2) {
+
+                updatePartnerStatus(
+                    "Connected 💕"
+                );
+
+            } else {
+
+                updatePartnerStatus(
+                    "Waiting to join"
+                );
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
-   SPACE ERROR
+   CONNECTION STATUS
    ========================================================= */
 
-socket.on(
-    "space-error",
-    message => {
-
-        roomJoined = false;
-
-
-        joinSpaceButton.disabled = false;
-
-        joinSpaceButton.textContent =
-            "🌸 Join Space";
+const connectionDot =
+    document.getElementById(
+        "connectionDot"
+    );
 
 
-        inviteError.textContent =
-            message ||
-            "Unable to join this space.";
-
-        roomStatus.textContent =
-            "Could not join space.";
-
-    }
-);
+const connectionText =
+    document.getElementById(
+        "connectionText"
+    );
 
 
-/* =========================================================
-   PARTNER JOIN
-   ========================================================= */
+function setConnection(
+    online,
+    text
+) {
 
-socket.on(
-    "partner-joined",
-    data => {
+    if (connectionDot) {
 
-        const name =
-            data?.username ||
-            "Partner";
-
-
-        partnerStatus.textContent =
-            name + " is here ♡";
-
-
-        roomStatus.textContent =
-            "Both of you are together 🌸";
-
-
-        systemMessage(
-            name + " joined your space 🌸"
+        connectionDot.classList.toggle(
+            "online",
+            online
         );
 
     }
-);
+
+
+    if (connectionText) {
+
+        connectionText.textContent =
+            text;
+
+    }
+
+}
 
 
 /* =========================================================
-   PARTNER LEFT
+   PARTNER STATUS
    ========================================================= */
 
-socket.on(
-    "partner-left",
-    () => {
+const partnerStatus =
+    document.getElementById(
+        "partnerStatus"
+    );
+
+
+function updatePartnerStatus(
+    text
+) {
+
+    if (partnerStatus) {
 
         partnerStatus.textContent =
-            "Waiting to join";
-
-        roomStatus.textContent =
-            "Waiting for partner";
-
-        systemMessage(
-            "Your partner left the space."
-        );
+            text;
 
     }
-);
+
+}
 
 
 /* =========================================================
    CHAT
    ========================================================= */
 
-$("chatForm").addEventListener(
-    "submit",
-    event => {
-
-        event.preventDefault();
-
-
-        const input = $("chatInput");
-
-        const message =
-            input.value.trim();
+const chatForm =
+    document.getElementById(
+        "chatForm"
+    );
 
 
-        if (!message) {
-            return;
-        }
+const chatInput =
+    document.getElementById(
+        "chatInput"
+    );
 
 
-        if (!roomJoined) {
-
-            systemMessage(
-                "Join your private space first 🌸"
-            );
-
-            return;
-        }
+const chatMessages =
+    document.getElementById(
+        "chatMessages"
+    );
 
 
-        socket.emit(
-            "chat-message",
-            {
-                message
-            }
-        );
+const emptyChat =
+    document.getElementById(
+        "emptyChat"
+    );
 
 
-        input.value = "";
-
-    }
-);
-
-
-socket.on(
-    "chat-message",
-    data => {
-
-        if (!data) {
-            return;
-        }
-
-
-        addMessage(
-            data.username || "Partner",
-            data.message || "",
-            data.username === username
-        );
-
-    }
-);
-
-
-/* =========================================================
-   CHAT UI
-   ========================================================= */
-
-function addMessage(
-    sender,
+function addChatMessage(
+    name,
     message,
-    mine
+    own
 ) {
 
-    const messages =
-        $("chatMessages");
+    if (!chatMessages) {
+        return;
+    }
 
 
-    $("emptyChat")?.remove();
+    if (emptyChat) {
+
+        emptyChat.style.display =
+            "none";
+
+    }
 
 
-    const bubble =
-        document.createElement("div");
+    const messageElement =
+        document.createElement(
+            "div"
+        );
 
 
-    bubble.className =
-        mine
-            ? "chat-bubble mine"
-            : "chat-bubble partner";
+    messageElement.style.margin =
+        "8px 0";
 
 
-    const name =
-        document.createElement("small");
+    messageElement.style.padding =
+        "9px 12px";
 
 
-    name.textContent =
-        mine
-            ? "You"
-            : sender;
+    messageElement.style.borderRadius =
+        "13px";
 
 
-    const text =
-        document.createElement("p");
+    messageElement.style.background =
+        own
+            ? "#fff0f5"
+            : "#ffffff";
 
 
-    text.textContent =
-        message;
+    messageElement.style.border =
+        "1px solid rgba(190,105,135,.12)";
 
 
-    bubble.appendChild(name);
+    messageElement.innerHTML =
+        `<strong style="font-size:9px;">
+            ${escapeHTML(name)}
+        </strong>
+        <div style="font-size:11px;margin-top:3px;">
+            ${escapeHTML(message)}
+        </div>`;
 
-    bubble.appendChild(text);
+
+    chatMessages.appendChild(
+        messageElement
+    );
 
 
-    messages.appendChild(bubble);
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
 
 }
 
 
-function systemMessage(message) {
+function escapeHTML(text) {
 
-    const messages =
-        $("chatMessages");
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
-
-    $("emptyChat")?.remove();
-
-
-    const item =
-        document.createElement("div");
-
-
-    item.style.textAlign = "center";
-    item.style.padding = "8px";
-    item.style.fontSize = "7px";
-    item.style.color = "#a48791";
+}
 
 
-    item.textContent =
-        message;
+if (chatForm) {
+
+    chatForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
 
 
-    messages.appendChild(item);
+            if (!chatInput) {
+                return;
+            }
 
 
-    messages.scrollTop =
-        messages.scrollHeight;
+            const message =
+                chatInput.value.trim();
+
+
+            if (!message) {
+                return;
+            }
+
+
+            addChatMessage(
+                username,
+                message,
+                true
+            );
+
+
+            if (socket) {
+
+                socket.emit(
+                    "sync-event",
+                    {
+                        type: "chat",
+                        name: username,
+                        message: message
+                    }
+                );
+
+            }
+
+
+            chatInput.value =
+                "";
+
+        }
+    );
+
+}
+
+
+if (socket) {
+
+    socket.on(
+        "sync-event",
+        function (data) {
+
+            if (
+                !data ||
+                data.type !== "chat"
+            ) {
+                return;
+            }
+
+
+            addChatMessage(
+                data.name ||
+                    "Partner",
+                data.message ||
+                    "",
+                false
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+const localVideo =
+    document.getElementById(
+        "localVideo"
+    );
+
+
+const localPlaceholder =
+    document.getElementById(
+        "localPlaceholder"
+    );
+
+
+const cameraButton =
+    document.getElementById(
+        "cameraButton"
+    );
+
+
+const cameraStatus =
+    document.getElementById(
+        "cameraStatus"
+    );
+
+
+let localStream =
+    null;
+
+
+let currentFacingMode =
+    "user";
+
+
+async function startCamera() {
+
+    if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ) {
+
+        setCameraStatus(
+            "Camera not supported"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        if (localStream) {
+
+            localStream
+                .getTracks()
+                .forEach(
+                    track =>
+                        track.stop()
+                );
+
+        }
+
+
+        localStream =
+            await navigator.mediaDevices
+                .getUserMedia(
+                    {
+                        video: {
+                            facingMode:
+                                currentFacingMode
+                        },
+                        audio: false
+                    }
+                );
+
+
+        if (localVideo) {
+
+            localVideo.srcObject =
+                localStream;
+
+        }
+
+
+        if (localPlaceholder) {
+
+            localPlaceholder.style.display =
+                "none";
+
+        }
+
+
+        setCameraStatus(
+            "Camera on"
+        );
+
+
+        if (cameraButton) {
+
+            cameraButton.textContent =
+                "📷";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Camera error:",
+            error
+        );
+
+
+        setCameraStatus(
+            "Camera permission needed"
+        );
+
+    }
+
+}
+
+
+function stopCamera() {
+
+    if (localStream) {
+
+        localStream
+            .getTracks()
+            .forEach(
+                track =>
+                    track.stop()
+            );
+
+        localStream =
+            null;
+
+    }
+
+
+    if (localVideo) {
+
+        localVideo.srcObject =
+            null;
+
+    }
+
+
+    if (localPlaceholder) {
+
+        localPlaceholder.style.display =
+            "flex";
+
+    }
+
+
+    setCameraStatus(
+        "Camera off"
+    );
+
+}
+
+
+function setCameraStatus(text) {
+
+    if (cameraStatus) {
+
+        cameraStatus.textContent =
+            text;
+
+    }
+
+}
+
+
+if (cameraButton) {
+
+    cameraButton.addEventListener(
+        "click",
+        function () {
+
+            if (localStream) {
+
+                stopCamera();
+
+            } else {
+
+                startCamera();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SWITCH CAMERA
+   ========================================================= */
+
+const switchCameraButton =
+    document.getElementById(
+        "switchCameraButton"
+    );
+
+
+if (switchCameraButton) {
+
+    switchCameraButton.addEventListener(
+        "click",
+        async function () {
+
+            currentFacingMode =
+                currentFacingMode === "user"
+                    ? "environment"
+                    : "user";
+
+
+            await startCamera();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   REMOTE VIDEO
+   ========================================================= */
+
+const remoteVideo =
+    document.getElementById(
+        "remoteVideo"
+    );
+
+
+const remotePlaceholder =
+    document.getElementById(
+        "remotePlaceholder"
+    );
+
+
+function stopRemoteVideo() {
+
+    if (remoteVideo) {
+
+        remoteVideo.srcObject =
+            null;
+
+    }
+
+
+    if (remotePlaceholder) {
+
+        remotePlaceholder.style.display =
+            "flex";
+
+    }
+
+}
+
+
+/* =========================================================
+   TAKE A BREAK
+   ========================================================= */
+
+const breakButton =
+    document.getElementById(
+        "breakButton"
+    );
+
+
+const breakOverlay =
+    document.getElementById(
+        "breakOverlay"
+    );
+
+
+const closeBreakButton =
+    document.getElementById(
+        "closeBreakButton"
+    );
+
+
+function openBreak() {
+
+    if (!breakOverlay) {
+        return;
+    }
+
+    breakOverlay.classList.add(
+        "show"
+    );
+
+    breakOverlay.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    if (socket) {
+
+        socket.emit(
+            "take-a-break"
+        );
+
+    }
+
+}
+
+
+function closeBreak() {
+
+    if (!breakOverlay) {
+        return;
+    }
+
+    breakOverlay.classList.remove(
+        "show"
+    );
+
+    breakOverlay.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+}
+
+
+if (breakButton) {
+
+    breakButton.addEventListener(
+        "click",
+        openBreak
+    );
+
+}
+
+
+if (closeBreakButton) {
+
+    closeBreakButton.addEventListener(
+        "click",
+        closeBreak
+    );
+
+}
+
+
+if (socket) {
+
+    socket.on(
+        "partner-break",
+        function (data) {
+
+            console.log(
+                "💕 Partner is taking a break",
+                data
+            );
+
+        }
+    );
 
 }
 
@@ -575,285 +1257,110 @@ function systemMessage(message) {
    LOGOUT
    ========================================================= */
 
-logoutButton.addEventListener(
-    "click",
-    () => {
+const logoutButton =
+    document.getElementById(
+        "logoutButton"
+    );
 
-        localStorage.removeItem(
-            "usspace_username"
-        );
 
-        localStorage.removeItem(
-            "usspace_invite_code"
-        );
+if (logoutButton) {
 
+    logoutButton.addEventListener(
+        "click",
+        function () {
 
-        socket.disconnect();
-
-
-        window.location.href =
-            "index.html";
-
-    }
-);
-
-
-/* =========================================================
-   CAMERA
-   ========================================================= */
-
-let localStream = null;
-
-let facingMode = "user";
-
-
-$("cameraButton").addEventListener(
-    "click",
-    async () => {
-
-        if (localStream) {
-
-            localStream
-                .getTracks()
-                .forEach(track => track.stop());
-
-
-            localStream = null;
-
-            $("localVideo").srcObject =
-                null;
-
-            $("localPlaceholder").style.display =
-                "flex";
-
-            $("cameraStatus").textContent =
-                "Camera off";
-
-            return;
-        }
-
-
-        try {
-
-            localStream =
-                await navigator.mediaDevices
-                    .getUserMedia({
-                        video: {
-                            facingMode
-                        },
-                        audio: false
-                    });
-
-
-            $("localVideo").srcObject =
-                localStream;
-
-
-            $("localPlaceholder").style.display =
-                "none";
-
-
-            $("cameraStatus").textContent =
-                "Camera on ♡";
-
-        } catch (error) {
-
-            $("cameraStatus").textContent =
-                "Camera permission denied";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   SWITCH CAMERA
-   ========================================================= */
-
-$("switchCameraButton").addEventListener(
-    "click",
-    async () => {
-
-        if (!localStream) {
-            return;
-        }
-
-
-        facingMode =
-            facingMode === "user"
-                ? "environment"
-                : "user";
-
-
-        localStream
-            .getTracks()
-            .forEach(track => track.stop());
-
-
-        try {
-
-            localStream =
-                await navigator.mediaDevices
-                    .getUserMedia({
-                        video: {
-                            facingMode
-                        },
-                        audio: false
-                    });
-
-
-            $("localVideo").srcObject =
-                localStream;
-
-        } catch (error) {
-
-            $("cameraStatus").textContent =
-                "Could not switch camera";
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   WEATHER LOCATION
-   ========================================================= */
-
-$("shareWeatherButton").addEventListener(
-    "click",
-    () => {
-
-        if (!navigator.geolocation) {
-
-            $("myWeatherLocation").textContent =
-                "Location unavailable";
-
-            return;
-        }
-
-
-        $("shareWeatherButton").textContent =
-            "📍 Getting location...";
-
-
-        navigator.geolocation.getCurrentPosition(
-            position => {
-
-                const location = {
-                    latitude:
-                        position.coords.latitude,
-
-                    longitude:
-                        position.coords.longitude
-                };
-
+            if (socket) {
 
                 socket.emit(
-                    "share-location",
-                    location
+                    "leave-space"
                 );
 
-
-                $("myWeatherLocation").textContent =
-                    "Location shared";
-
-
-                $("shareWeatherButton").textContent =
-                    "🌤️ Weather Shared";
-
-            },
-
-            () => {
-
-                $("shareWeatherButton").textContent =
-                    "🌤️ Share My Weather";
-
-                $("myWeatherLocation").textContent =
-                    "Permission denied";
-
             }
-        );
-
-    }
-);
 
 
-/* =========================================================
-   PARTNER LOCATION
-   ========================================================= */
+            stopCamera();
 
-socket.on(
-    "partner-location",
-    () => {
 
-        $("partnerWeatherLocation").textContent =
-            "Location shared";
+            localStorage.removeItem(
+                "usspace_room"
+            );
 
-    }
-);
+
+            window.location.href =
+                "index.html";
+
+        }
+    );
+
+}
 
 
 /* =========================================================
    SAKURA
    ========================================================= */
 
-const sakura =
-    $("sakuraContainer");
-
-
-function createPetal() {
-
-    const petal =
-        document.createElement("span");
-
-
-    petal.className =
-        "sakura-petal";
-
-
-    petal.style.left =
-        Math.random() * 100 + "%";
-
-
-    petal.style.setProperty(
-        "--drift",
-        `${Math.random() * 160 - 80}px`
+const sakuraContainer =
+    document.getElementById(
+        "sakuraContainer"
     );
 
 
-    petal.style.animationDuration =
-        `${6 + Math.random() * 7}s`;
+function createSakura() {
+
+    if (!sakuraContainer) {
+        return;
+    }
 
 
-    const size =
-        7 + Math.random() * 6;
+    const flower =
+        document.createElement(
+            "div"
+        );
 
 
-    petal.style.width =
-        size + "px";
+    flower.className =
+        "sakura";
 
 
-    petal.style.height =
-        size * .7 + "px";
+    flower.textContent =
+        "🌸";
 
 
-    sakura.appendChild(petal);
+    flower.style.left =
+        Math.random() * 100 +
+        "%";
+
+
+    flower.style.fontSize =
+        (10 + Math.random() * 12) +
+        "px";
+
+
+    flower.style.animationDuration =
+        (7 + Math.random() * 8) +
+        "s";
+
+
+    flower.style.animationDelay =
+        Math.random() * 5 +
+        "s";
+
+
+    sakuraContainer.appendChild(
+        flower
+    );
 
 
     setTimeout(
-        () => petal.remove(),
-        15000
+        function () {
+
+            flower.remove();
+
+        },
+        16000
     );
 
 }
-
-
-setInterval(
-    createPetal,
-    500
-);
 
 
 for (
@@ -862,9 +1369,31 @@ for (
     i++
 ) {
 
-    setTimeout(
-        createPetal,
-        i * 250
-    );
+    createSakura();
 
 }
+
+
+setInterval(
+    createSakura,
+    1200
+);
+
+
+/* =========================================================
+   PAGE LOAD
+   ========================================================= */
+
+console.log(
+    "🌸 USSPACE Home loaded"
+);
+
+console.log(
+    "💌 Invite Code:",
+    inviteCode
+);
+
+console.log(
+    "🚪 Room:",
+    room
+);
