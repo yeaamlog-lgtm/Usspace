@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff7fa"
+    >
+
+    <title>USSPACE • Draw & Guess</title>
+
+    <link
+        rel="stylesheet"
+        href="draw.css"
+    >
+</head>
+
+<body>
+
+    <!-- Sakura -->
+    <div
+        class="sakura-container"
+        id="sakuraContainer"
+    ></div>
+
+
+    <!-- Background -->
+    <div class="bg-orb orb-one"></div>
+    <div class="bg-orb orb-two"></div>
+
+
+    <main class="draw-page">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <header class="draw-header">
+
+            <a
+                href="games.html"
+                class="back-button"
+                aria-label="Back to games"
+            >
+                ←
+            </a>
+
+
+            <div class="page-title">
+
+                <span class="title-icon">
+                    🎨
+                </span>
+
+                <div>
+
+                    <strong>
+                        Draw & Guess
+                    </strong>
+
+                    <small>
+                        OUR LITTLE CANVAS
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="connection"
+                id="connectionStatus"
+            >
+
+                <span></span>
+
+                <small>
+                    Connecting
+                </small>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PLAYERS
+             ================================================= -->
+
+        <section class="players-bar">
+
+
+            <!-- YOU -->
+
+            <div
+                class="player-card active"
+                id="youCard"
+            >
+
+                <div class="avatar">
+                    👤
+                </div>
+
+                <div class="player-details">
+
+                    <span class="player-label">
+                        YOU
+                    </span>
+
+                    <strong id="youName">
+                        You
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="vs">
+
+                <span>VS</span>
+
+                <i>🌸</i>
+
+            </div>
+
+
+            <!-- PARTNER -->
+
+            <div
+                class="player-card"
+                id="partnerCard"
+            >
+
+                <div class="avatar partner-avatar">
+                    👤
+                </div>
+
+                <div class="player-details">
+
+                    <span class="player-label">
+                        PARTNER
+                    </span>
+
+                    <strong id="partnerName">
+                        Waiting...
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             GAME STATUS
+             ================================================= -->
+
+        <section class="game-status">
+
+
+            <div class="turn-info">
+
+                <span class="status-dot"></span>
+
+                <span id="turnText">
+                    Waiting for players...
+                </span>
+
+            </div>
+
+
+            <div class="timer">
+
+                <span>⏱</span>
+
+                <strong id="timer">
+                    60
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             WORD / GUESS
+             ================================================= -->
+
+        <section class="word-section">
+
+
+            <div
+                class="word-box"
+                id="wordBox"
+            >
+
+                <span>
+                    YOUR WORD
+                </span>
+
+                <strong
+                    id="wordDisplay"
+                >
+                    Waiting...
+                </strong>
+
+            </div>
+
+
+            <div
+                class="guess-box"
+                id="guessBox"
+            >
+
+                <span>
+                    GUESS THE DRAWING
+                </span>
+
+                <div class="guess-row">
+
+                    <input
+                        id="guessInput"
+                        type="text"
+                        maxlength="40"
+                        autocomplete="off"
+                        placeholder="Type your guess..."
+                    >
+
+                    <button
+                        id="guessButton"
+                        type="button"
+                    >
+                        Guess
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CANVAS
+             ================================================= -->
+
+        <section class="canvas-section">
+
+            <div class="canvas-topbar">
+
+                <span>
+                    <i></i>
+                    LIVE CANVAS
+                </span>
+
+                <span
+                    id="canvasOwner"
+                >
+                    Your turn
+                </span>
+
+            </div>
+
+
+            <div class="canvas-wrapper">
+
+                <canvas
+                    id="drawingCanvas"
+                ></canvas>
+
+
+                <div
+                    class="canvas-placeholder"
+                    id="canvasPlaceholder"
+                >
+
+                    <span>
+                        🎨
+                    </span>
+
+                    <p>
+                        Waiting for the artist...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- DRAWING TOOLS -->
+
+            <div
+                class="drawing-tools"
+                id="drawingTools"
+            >
+
+                <button
+                    type="button"
+                    class="tool active"
+                    data-size="4"
+                    aria-label="Small brush"
+                >
+                    <span class="brush-small"></span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="tool"
+                    data-size="8"
+                    aria-label="Medium brush"
+                >
+                    <span class="brush-medium"></span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="tool"
+                    data-size="14"
+                    aria-label="Large brush"
+                >
+                    <span class="brush-large"></span>
+                </button>
+
+
+                <div class="tool-divider"></div>
+
+
+                <button
+                    type="button"
+                    id="undoButton"
+                    class="action-tool"
+                    aria-label="Undo"
+                >
+                    ↶
+                </button>
+
+
+                <button
+                    type="button"
+                    id="clearButton"
+                    class="action-tool"
+                    aria-label="Clear canvas"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CHAT / GUESSES
+             ================================================= -->
+
+        <section class="guess-feed">
+
+            <div class="feed-heading">
+
+                <span>
+                    💭
+                </span>
+
+                <strong>
+                    Guesses
+                </strong>
+
+                <small
+                    id="guessCount"
+                >
+                    0
+                </small>
+
+            </div>
+
+
+            <div
+                class="feed-messages"
+                id="guessMessages"
+            >
+
+                <div class="empty-feed">
+                    Guesses will appear here...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ROUND CONTROL
+             ================================================= -->
+
+        <section class="round-control">
+
+            <button
+                id="startGameButton"
+                type="button"
+                class="primary-button"
+            >
+                <span>🌸</span>
+                Start Game
+            </button>
+
+
+            <button
+                id="nextRoundButton"
+                type="button"
+                class="secondary-button hidden"
+            >
+                Next Round
+                →
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer>
+
+            <span>🌸</span>
+
+            <p>
+                Just draw something
+                <strong>beautiful.</strong>
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+
+    </main>
+
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Page JS -->
+    <script src="draw.js"></script>
+
+</body>
+</html>

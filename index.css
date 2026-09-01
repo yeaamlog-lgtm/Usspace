@@ -1,0 +1,844 @@
+/* =========================================================
+   USSPACE — INDEX PAGE
+   Premium Sakura Login
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: #633f4e;
+
+    background:
+        radial-gradient(
+            circle at 15% 15%,
+            #ffffff 0%,
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            #ffdce9 0%,
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #fffafd,
+            #fff1f6 48%,
+            #ffe8f1
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   SAKURA BACKGROUND
+   ========================================================= */
+
+.sakura-container {
+    position: fixed;
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+.sakura-petal {
+    position: absolute;
+
+    top: -40px;
+
+    width: 13px;
+    height: 9px;
+
+    background: #f3a4bd;
+
+    border-radius:
+        70% 30%
+        70% 30%;
+
+    opacity: 0.65;
+
+    filter: blur(0.2px);
+
+    animation:
+        sakuraFall linear forwards;
+}
+
+.sakura-petal::after {
+    content: "";
+
+    position: absolute;
+
+    width: 3px;
+    height: 3px;
+
+    top: 2px;
+    left: 2px;
+
+    background: #ffffff;
+
+    border-radius: 50%;
+
+    opacity: 0.6;
+}
+
+@keyframes sakuraFall {
+
+    0% {
+        transform:
+            translate3d(0, -30px, 0)
+            rotate(0deg);
+    }
+
+    25% {
+        transform:
+            translate3d(35px, 25vh, 0)
+            rotate(90deg);
+    }
+
+    50% {
+        transform:
+            translate3d(-20px, 50vh, 0)
+            rotate(180deg);
+    }
+
+    75% {
+        transform:
+            translate3d(30px, 75vh, 0)
+            rotate(270deg);
+    }
+
+    100% {
+        transform:
+            translate3d(-25px, 110vh, 0)
+            rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
+.login-page {
+    position: relative;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+.login-card {
+
+    width: min(100%, 430px);
+
+    padding:
+        38px
+        30px
+        28px;
+
+    border-radius: 32px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.82),
+            rgba(255, 245, 249, 0.68)
+        );
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.95);
+
+    box-shadow:
+        0 30px 80px rgba(177, 76, 111, 0.13),
+        0 8px 25px rgba(177, 76, 111, 0.07);
+
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    animation:
+        cardAppear 0.9s cubic-bezier(.2,.8,.2,1)
+        both;
+}
+
+@keyframes cardAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(35px)
+            scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo-area {
+    text-align: center;
+}
+
+.logo-flower {
+
+    font-size: 48px;
+
+    margin-bottom: 4px;
+
+    display: inline-block;
+
+    animation:
+        flowerFloat 3s ease-in-out infinite,
+        flowerGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes flowerFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            rotate(-4deg);
+    }
+
+    50% {
+        transform:
+            translateY(-7px)
+            rotate(5deg);
+    }
+}
+
+@keyframes flowerGlow {
+
+    0%,
+    100% {
+        filter:
+            drop-shadow(
+                0 5px 12px
+                rgba(235, 104, 148, 0.12)
+            );
+    }
+
+    50% {
+        filter:
+            drop-shadow(
+                0 7px 22px
+                rgba(235, 104, 148, 0.32)
+            );
+    }
+}
+
+
+.logo-area h1 {
+
+    font-size: 34px;
+
+    letter-spacing: 6px;
+
+    font-weight: 900;
+
+    color: #67414f;
+
+    margin-top: 5px;
+}
+
+.logo-area h1 span {
+
+    color: #e96c98;
+
+    font-weight: 900;
+}
+
+.logo-area p {
+
+    margin-top: 9px;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+    color: #aa7d8e;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin:
+        25px
+        0
+        22px;
+}
+
+.divider span {
+
+    height: 1px;
+
+    flex: 1;
+
+    background:
+        linear-gradient(
+            to right,
+            transparent,
+            #efc5d3,
+            transparent
+        );
+}
+
+.divider b {
+
+    color: #e7769d;
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   INPUT GROUP
+   ========================================================= */
+
+.input-group {
+
+    margin-bottom: 17px;
+}
+
+.input-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 2.2px;
+
+    color: #997080;
+}
+
+
+/* =========================================================
+   INPUT BOX
+   ========================================================= */
+
+.input-box {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    min-height: 51px;
+
+    padding:
+        0
+        14px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255, 248, 251, 0.95);
+
+    border:
+        1px solid
+        rgba(238, 194, 210, 0.55);
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+.input-box > span {
+
+    flex-shrink: 0;
+
+    font-size: 15px;
+
+    opacity: 0.8;
+}
+
+.input-box:focus-within {
+
+    border-color: #eca2bb;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(236, 162, 187, 0.10);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.input-box select {
+
+    width: 100%;
+
+    height: 49px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #6c4655;
+
+    font-size: 13px;
+
+    appearance: none;
+
+    cursor: pointer;
+}
+
+.input-box select option {
+
+    background: #fff8fb;
+
+    color: #6c4655;
+}
+
+
+/* =========================================================
+   PASSWORD INPUT
+   ========================================================= */
+
+.input-box input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 49px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #6c4655;
+
+    font-size: 13px;
+}
+
+.input-box input::placeholder {
+
+    color: #c19eab;
+}
+
+
+/* =========================================================
+   PASSWORD BUTTON
+   ========================================================= */
+
+.password-toggle {
+
+    flex-shrink: 0;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+
+    background: transparent;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    opacity: 0.6;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+}
+
+.password-toggle:hover {
+
+    opacity: 1;
+
+    transform:
+        scale(1.08);
+}
+
+.password-toggle:active {
+
+    transform:
+        scale(0.9);
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.login-error {
+
+    min-height: 17px;
+
+    margin-top: 2px;
+
+    margin-bottom: 4px;
+
+    text-align: center;
+
+    color: #d35d80;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   WRONG PASSWORD SHAKE
+   ========================================================= */
+
+.shake {
+
+    animation:
+        loginShake 0.45s ease;
+}
+
+@keyframes loginShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-7px);
+    }
+
+    40% {
+        transform: translateX(7px);
+    }
+
+    60% {
+        transform: translateX(-5px);
+    }
+
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+
+/* =========================================================
+   ENTER BUTTON
+   ========================================================= */
+
+.enter-button {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 53px;
+
+    margin-top: 10px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 13px;
+
+    border: none;
+
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e86695,
+            #f19db8
+        );
+
+    color: white;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.8px;
+
+    box-shadow:
+        0 13px 25px
+        rgba(225, 92, 132, 0.22);
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.enter-button::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 70%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.35),
+            transparent
+        );
+
+    transform:
+        skewX(-20deg);
+
+    transition:
+        left .65s ease;
+}
+
+.enter-button:hover::before {
+
+    left: 140%;
+}
+
+.enter-button:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 17px 32px
+        rgba(225, 92, 132, 0.28);
+}
+
+.enter-button:active {
+
+    transform:
+        translateY(1px)
+        scale(0.97);
+}
+
+.enter-button strong {
+
+    font-size: 18px;
+
+    font-weight: 400;
+
+    animation:
+        heartPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes heartPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.login-footer {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    margin-top: 24px;
+}
+
+.login-footer span {
+
+    font-size: 10px;
+
+    opacity: .65;
+}
+
+.login-footer p {
+
+    color: #ad8493;
+
+    font-size: 8px;
+
+    letter-spacing: 1.1px;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .login-page {
+
+        padding:
+            18px;
+    }
+
+    .login-card {
+
+        padding:
+            32px
+            21px
+            25px;
+
+        border-radius: 28px;
+    }
+
+    .logo-flower {
+
+        font-size: 43px;
+    }
+
+    .logo-area h1 {
+
+        font-size: 29px;
+
+        letter-spacing: 5px;
+    }
+
+    .logo-area p {
+
+        font-size: 10px;
+    }
+
+    .input-box {
+
+        min-height: 50px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 350px) {
+
+    .login-page {
+
+        padding: 12px;
+    }
+
+    .login-card {
+
+        padding:
+            28px
+            17px
+            22px;
+    }
+
+    .logo-area h1 {
+
+        font-size: 26px;
+
+        letter-spacing: 4px;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+    }
+}

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff7fa"
+    >
+
+    <title>USSPACE • Tic-Tac-Toe</title>
+
+    <link
+        rel="stylesheet"
+        href="tictactoe.css"
+    >
+</head>
+
+<body>
+
+    <!-- ==============================
+         BACKGROUND
+         ============================== -->
+
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <div
+        class="sakura-layer"
+        id="sakuraLayer"
+    ></div>
+
+
+    <!-- ==============================
+         MAIN
+         ============================== -->
+
+    <main class="game-page">
+
+
+        <!-- HEADER -->
+
+        <header class="game-header">
+
+            <a
+                href="games.html"
+                class="back-btn"
+                aria-label="Back"
+            >
+                <span>←</span>
+            </a>
+
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    ✨
+                </div>
+
+                <div>
+
+                    <h1>
+                        Tic-Tac-Toe
+                    </h1>
+
+                    <p>
+                        OUR LITTLE GAME
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="connection-status"
+                id="connectionStatus"
+            >
+
+                <span></span>
+
+                <small>
+                    Connecting
+                </small>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==============================
+             PLAYERS
+             ============================== -->
+
+        <section class="players">
+
+            <!-- YOU -->
+
+            <div
+                class="player-card active"
+                id="youPlayer"
+            >
+
+                <div class="player-avatar">
+                    🌸
+                </div>
+
+                <div class="player-info">
+
+                    <span>
+                        YOU
+                    </span>
+
+                    <strong id="youName">
+                        You
+                    </strong>
+
+                </div>
+
+                <div
+                    class="symbol x-symbol"
+                    id="youSymbol"
+                >
+                    X
+                </div>
+
+            </div>
+
+
+            <div class="versus">
+
+                <span>VS</span>
+
+                <i>♡</i>
+
+            </div>
+
+
+            <!-- PARTNER -->
+
+            <div
+                class="player-card"
+                id="partnerPlayer"
+            >
+
+                <div class="player-avatar partner">
+                    🌷
+                </div>
+
+                <div class="player-info">
+
+                    <span>
+                        PARTNER
+                    </span>
+
+                    <strong id="partnerName">
+                        Waiting...
+                    </strong>
+
+                </div>
+
+                <div
+                    class="symbol o-symbol"
+                    id="partnerSymbol"
+                >
+                    O
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             GAME STATUS
+             ============================== -->
+
+        <section class="status-card">
+
+            <div class="status-icon">
+                ♡
+            </div>
+
+            <div class="status-content">
+
+                <span>
+                    GAME STATUS
+                </span>
+
+                <strong id="gameStatus">
+                    Waiting for partner...
+                </strong>
+
+            </div>
+
+            <div
+                class="round-number"
+                id="roundNumber"
+            >
+                ROUND 1
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             BOARD
+             ============================== -->
+
+        <section class="board-area">
+
+            <div class="board-glow"></div>
+
+
+            <div
+                class="game-board"
+                id="gameBoard"
+                role="grid"
+                aria-label="Tic-Tac-Toe board"
+            >
+
+                <button
+                    class="cell"
+                    data-index="0"
+                    aria-label="Cell 1"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="1"
+                    aria-label="Cell 2"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="2"
+                    aria-label="Cell 3"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="3"
+                    aria-label="Cell 4"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="4"
+                    aria-label="Cell 5"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="5"
+                    aria-label="Cell 6"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="6"
+                    aria-label="Cell 7"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="7"
+                    aria-label="Cell 8"
+                    role="gridcell"
+                ></button>
+
+                <button
+                    class="cell"
+                    data-index="8"
+                    aria-label="Cell 9"
+                    role="gridcell"
+                ></button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             TURN
+             ============================== -->
+
+        <div
+            class="turn-pill"
+            id="turnPill"
+        >
+
+            <span class="turn-dot"></span>
+
+            <span id="turnText">
+                Waiting for partner
+            </span>
+
+        </div>
+
+
+        <!-- ==============================
+             SCORE
+             ============================== -->
+
+        <section class="score-card">
+
+            <div class="score-item">
+
+                <span>
+                    YOU
+                </span>
+
+                <strong id="yourScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="score-divider">
+                ✿
+            </div>
+
+
+            <div class="score-item">
+
+                <span>
+                    DRAWS
+                </span>
+
+                <strong id="drawScore">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="score-divider">
+                ✿
+            </div>
+
+
+            <div class="score-item">
+
+                <span>
+                    PARTNER
+                </span>
+
+                <strong id="partnerScore">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================
+             CONTROLS
+             ============================== -->
+
+        <section class="controls">
+
+            <button
+                type="button"
+                id="newGameButton"
+                class="primary-btn"
+            >
+
+                <span>
+                    🌸
+                </span>
+
+                New Game
+
+            </button>
+
+
+            <button
+                type="button"
+                id="leaveButton"
+                class="secondary-btn"
+            >
+
+                Leave Game
+
+            </button>
+
+        </section>
+
+
+        <!-- ==============================
+             RESULT
+             ============================== -->
+
+        <div
+            class="result-overlay hidden"
+            id="resultOverlay"
+        >
+
+            <div class="result-card">
+
+                <div
+                    class="result-flower"
+                    id="resultFlower"
+                >
+                    🌸
+                </div>
+
+                <span>
+                    ROUND COMPLETE
+                </span>
+
+                <h2 id="resultTitle">
+                    You Win!
+                </h2>
+
+                <p id="resultMessage">
+                    Beautiful move ✨
+                </p>
+
+                <button
+                    type="button"
+                    id="resultNewGame"
+                >
+                    Play Again
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==============================
+             FOOTER
+             ============================== -->
+
+        <footer>
+
+            <span>🌸</span>
+
+            <p>
+                Just a tiny game
+                <strong>for us.</strong>
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- Socket.IO -->
+
+    <script
+        src="/socket.io/socket.io.js"
+    ></script>
+
+
+    <!-- Independent JS -->
+
+    <script
+        src="tictactoe.js"
+    ></script>
+
+</body>
+</html>

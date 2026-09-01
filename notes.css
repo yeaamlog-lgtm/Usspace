@@ -1,0 +1,1616 @@
+/* =========================================================
+   USSPACE — NOTES.CSS
+   Sticky Notes • Sakura Theme • Mobile First
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --pink: #df7195;
+    --pink-dark: #c95d82;
+    --pink-soft: #ffe7ef;
+
+    --text: #60404d;
+    --muted: #a98794;
+
+    --white: #ffffff;
+    --border: rgba(210, 112, 145, .2);
+
+    --shadow:
+        0 18px 45px
+        rgba(130, 70, 95, .12);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(255,255,255,.95),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 95% 10%,
+            rgba(255,202,220,.55),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(255,225,236,.7),
+            transparent 45%
+        ),
+        linear-gradient(
+            135deg,
+            #fffafd,
+            #fff1f6
+        );
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+   ========================================================= */
+
+.background-glow {
+    position: fixed;
+
+    width: 260px;
+    height: 260px;
+
+    border-radius: 50%;
+
+    filter: blur(75px);
+
+    opacity: .22;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+.glow-one {
+    top: 5%;
+    left: -170px;
+
+    background: #ffc4d8;
+
+    animation:
+        glowMoveOne 10s ease-in-out infinite;
+}
+
+.glow-two {
+    right: -170px;
+    bottom: 5%;
+
+    background: #e9bfd0;
+
+    animation:
+        glowMoveTwo 12s ease-in-out infinite;
+}
+
+@keyframes glowMoveOne {
+
+    0%,100% {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(45px,30px);
+    }
+}
+
+@keyframes glowMoveTwo {
+
+    0%,100% {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(-40px,-35px);
+    }
+}
+
+
+/* =========================================================
+   SAKURA PETALS
+   ========================================================= */
+
+.sakura-container {
+    position: fixed;
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.sakura-petal {
+    position: absolute;
+
+    top: -25px;
+
+    width: 11px;
+    height: 7px;
+
+    border-radius:
+        80% 20% 80% 20%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eca0ba,
+            #fad0dd
+        );
+
+    opacity: .4;
+
+    animation:
+        petalFall linear forwards;
+}
+
+@keyframes petalFall {
+
+    0% {
+        transform:
+            translate3d(0,-20px,0)
+            rotate(0);
+    }
+
+    25% {
+        transform:
+            translate3d(30px,25vh,0)
+            rotate(90deg);
+    }
+
+    50% {
+        transform:
+            translate3d(-25px,50vh,0)
+            rotate(180deg);
+    }
+
+    75% {
+        transform:
+            translate3d(25px,75vh,0)
+            rotate(270deg);
+    }
+
+    100% {
+        transform:
+            translate3d(-15px,110vh,0)
+            rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.notes-page {
+    position: relative;
+
+    z-index: 5;
+
+    width:
+        min(
+            calc(100% - 18px),
+            1100px
+        );
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding:
+        12px
+        0
+        35px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.notes-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 9px;
+
+    margin-bottom: 25px;
+
+    animation:
+        headerAppear .65s ease both;
+}
+
+@keyframes headerAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.back-button {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.75);
+
+    color: #936276;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    backdrop-filter:
+        blur(12px);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.back-button:hover {
+    transform:
+        translateX(-3px);
+
+    box-shadow:
+        0 9px 22px
+        rgba(170,75,110,.1);
+}
+
+.back-button:active {
+    transform:
+        scale(.9);
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.notes-brand {
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.brand-icon {
+    font-size: 21px;
+
+    animation:
+        noteFloat 3s ease-in-out infinite;
+}
+
+@keyframes noteFloat {
+
+    0%,100% {
+        transform:
+            translateY(0)
+            rotate(0);
+    }
+
+    50% {
+        transform:
+            translateY(-4px)
+            rotate(4deg);
+    }
+}
+
+.notes-brand strong {
+    display: block;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.notes-brand strong span {
+    color: var(--pink);
+}
+
+.notes-brand small {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 5px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+
+    color: #b08a99;
+}
+
+
+/* =========================================================
+   SAVE STATUS
+   ========================================================= */
+
+.save-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding:
+        7px
+        9px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.7);
+
+    color: #9c7586;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    backdrop-filter:
+        blur(10px);
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #83c99c;
+
+    transition:
+        background .3s ease;
+}
+
+.status-dot.saving {
+    background: #e7b276;
+
+    animation:
+        statusBlink 1s infinite;
+}
+
+.status-dot.error {
+    background: #d77d95;
+}
+
+@keyframes statusBlink {
+
+    0%,100% {
+        opacity: .4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.notes-intro {
+    text-align: center;
+
+    margin-bottom: 20px;
+
+    animation:
+        introAppear .7s .08s ease both;
+}
+
+@keyframes introAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.eyebrow {
+    margin-bottom: 7px;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    color: #cf7b99;
+}
+
+.notes-intro h1 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(
+            30px,
+            8vw,
+            52px
+        );
+
+    font-weight: 600;
+
+    letter-spacing: -.8px;
+
+    color: #603c4b;
+}
+
+.notes-intro h1 span {
+    color: var(--pink);
+}
+
+.notes-intro > p:last-child {
+    margin-top: 7px;
+
+    font-size: 8px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.notes-toolbar {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+    animation:
+        toolbarAppear .7s .15s ease both;
+}
+
+@keyframes toolbarAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.add-note-button {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 39px;
+
+    padding:
+        0
+        13px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e78aa7,
+            #d56d91
+        );
+
+    color: white;
+
+    font-size: 8px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 9px 25px
+        rgba(213,109,145,.2);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.add-note-button span {
+    font-size: 15px;
+}
+
+.add-note-button:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 13px 28px
+        rgba(213,109,145,.25);
+}
+
+.add-note-button:active {
+    transform:
+        scale(.93);
+}
+
+.notes-count {
+    text-align: right;
+}
+
+.notes-count span {
+    font-size: 15px;
+
+    font-weight: 900;
+
+    color: #744a5a;
+}
+
+.notes-count small {
+    display: block;
+
+    margin-top: 1px;
+
+    font-size: 5px;
+
+    color: #aa8492;
+}
+
+
+/* =========================================================
+   NOTES WALL
+   ========================================================= */
+
+.notes-wall {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+
+    align-items: start;
+
+    min-height: 250px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-notes {
+    grid-column:
+        1 / -1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 270px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    border:
+        1px dashed
+        rgba(213,113,145,.3);
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,.45);
+
+    animation:
+        emptyAppear .6s ease both;
+}
+
+@keyframes emptyAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.empty-icon {
+    font-size: 36px;
+
+    margin-bottom: 10px;
+
+    animation:
+        emptyFloat 3s ease-in-out infinite;
+}
+
+@keyframes emptyFloat {
+
+    0%,100% {
+        transform:
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            translateY(-6px);
+    }
+}
+
+.empty-notes h2 {
+    font-family:
+        Georgia,
+        serif;
+
+    font-size: 18px;
+
+    color: #704655;
+}
+
+.empty-notes p {
+    max-width: 240px;
+
+    margin-top: 6px;
+
+    font-size: 7px;
+
+    line-height: 1.6;
+
+    color: #aa8492;
+}
+
+.empty-notes button {
+    margin-top: 15px;
+
+    padding:
+        9px
+        13px;
+
+    border:
+        1px solid
+        rgba(213,113,145,.25);
+
+    border-radius: 10px;
+
+    background:
+        #fff0f5;
+
+    color: #a35f78;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease;
+}
+
+.empty-notes button:hover {
+    transform:
+        translateY(-2px);
+}
+
+.empty-notes button:active {
+    transform:
+        scale(.92);
+}
+
+
+/* =========================================================
+   STICKY NOTE
+   ========================================================= */
+
+.sticky-note {
+    position: relative;
+
+    min-height: 175px;
+
+    padding:
+        24px
+        14px
+        14px;
+
+    overflow: hidden;
+
+    border-radius: 3px;
+
+    box-shadow:
+        0 14px 25px
+        rgba(105,67,80,.12);
+
+    transform:
+        rotate(var(--note-rotation));
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+
+    animation:
+        noteAppear .5s ease both;
+}
+
+@keyframes noteAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(20px)
+            rotate(var(--note-rotation))
+            scale(.94);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            rotate(var(--note-rotation))
+            scale(1);
+    }
+}
+
+.sticky-note:hover {
+    transform:
+        rotate(0)
+        translateY(-5px)
+        scale(1.015);
+
+    box-shadow:
+        0 21px 38px
+        rgba(105,67,80,.17);
+}
+
+
+/* =========================================================
+   NOTE COLOURS
+   ========================================================= */
+
+.sticky-note.yellow {
+    background:
+        linear-gradient(
+            135deg,
+            #fff3a8,
+            #ffed91
+        );
+}
+
+.sticky-note.pink {
+    background:
+        linear-gradient(
+            135deg,
+            #ffd5e2,
+            #ffc4d5
+        );
+}
+
+.sticky-note.lavender {
+    background:
+        linear-gradient(
+            135deg,
+            #e6d9ff,
+            #d9c9fa
+        );
+}
+
+.sticky-note.mint {
+    background:
+        linear-gradient(
+            135deg,
+            #d7f4df,
+            #c6ebd1
+        );
+}
+
+.sticky-note.peach {
+    background:
+        linear-gradient(
+            135deg,
+            #ffd9c2,
+            #ffccb0
+        );
+}
+
+
+/* =========================================================
+   PAPER TEXTURE
+   ========================================================= */
+
+.sticky-note::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .18;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 4px,
+            rgba(120,80,80,.035) 5px
+        );
+}
+
+
+/* =========================================================
+   NOTE PIN
+   ========================================================= */
+
+.note-pin {
+    position: absolute;
+
+    top: 7px;
+    left: 50%;
+
+    width: 11px;
+    height: 11px;
+
+    transform:
+        translateX(-50%);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #fff,
+            #df7195 40%,
+            #b85072 100%
+        );
+
+    box-shadow:
+        0 3px 5px
+        rgba(90,45,60,.18);
+
+    z-index: 2;
+}
+
+.note-pin::after {
+    content: "";
+
+    position: absolute;
+
+    left: 3px;
+    top: 3px;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    opacity: .7;
+}
+
+
+/* =========================================================
+   NOTE CONTENT
+   ========================================================= */
+
+.note-title {
+    position: relative;
+
+    z-index: 2;
+
+    padding-right: 25px;
+
+    font-family:
+        "Comic Sans MS",
+        "Trebuchet MS",
+        cursive;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    color: #60404d;
+
+    overflow-wrap: anywhere;
+}
+
+.note-content {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 9px;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+
+    font-family:
+        "Comic Sans MS",
+        "Trebuchet MS",
+        cursive;
+
+    font-size: 9px;
+
+    line-height: 1.55;
+
+    color: #70505d;
+}
+
+.note-date {
+    position: absolute;
+
+    left: 14px;
+    bottom: 10px;
+
+    font-size: 5px;
+
+    font-weight: 700;
+
+    color: rgba(95,64,76,.58);
+}
+
+
+/* =========================================================
+   NOTE ACTIONS
+   ========================================================= */
+
+.note-actions {
+    position: absolute;
+
+    right: 8px;
+    bottom: 7px;
+
+    display: flex;
+
+    gap: 4px;
+
+    z-index: 3;
+}
+
+.note-action {
+    width: 26px;
+    height: 26px;
+
+    display: grid;
+
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(95,64,76,.12);
+
+    border-radius: 8px;
+
+    background:
+        rgba(255,255,255,.35);
+
+    color: #76525f;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        background .18s ease;
+}
+
+.note-action:hover {
+    background:
+        rgba(255,255,255,.6);
+
+    transform:
+        translateY(-2px);
+}
+
+.note-action:active {
+    transform:
+        scale(.85);
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.note-modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    z-index: 100;
+}
+
+.note-modal.active {
+    display: flex;
+}
+
+.modal-backdrop {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(69,38,49,.3);
+
+    backdrop-filter:
+        blur(7px);
+
+    animation:
+        backdropIn .25s ease both;
+}
+
+@keyframes backdropIn {
+
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   EDITOR
+   ========================================================= */
+
+.note-editor {
+    position: relative;
+
+    width:
+        min(
+            100%,
+            390px
+        );
+
+    padding:
+        28px
+        20px
+        20px;
+
+    border-radius: 5px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff6a9,
+            #ffef98
+        );
+
+    box-shadow:
+        0 28px 70px
+        rgba(70,40,50,.25);
+
+    transform:
+        rotate(-1deg);
+
+    animation:
+        editorIn .4s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes editorIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(25px)
+            rotate(-3deg)
+            scale(.9);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            rotate(-1deg)
+            scale(1);
+    }
+}
+
+.close-editor {
+    position: absolute;
+
+    top: 9px;
+    right: 10px;
+
+    width: 29px;
+    height: 29px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.35);
+
+    color: #76525f;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease;
+}
+
+.close-editor:hover {
+    transform:
+        rotate(90deg);
+}
+
+.editor-pin {
+    position: absolute;
+
+    top: 6px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    font-size: 15px;
+}
+
+.editor-label {
+    margin-bottom: 9px;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+    color: #9b6b79;
+}
+
+.note-editor input,
+.note-editor textarea {
+    width: 100%;
+
+    border: 0;
+
+    outline: none;
+
+    background:
+        transparent;
+
+    color: #60404d;
+
+    font-family:
+        "Comic Sans MS",
+        "Trebuchet MS",
+        cursive;
+}
+
+.note-editor input {
+    padding:
+        6px
+        0;
+
+    border-bottom:
+        1px dashed
+        rgba(100,70,80,.25);
+
+    font-size: 17px;
+
+    font-weight: 900;
+}
+
+.note-editor textarea {
+    min-height: 125px;
+
+    margin-top: 10px;
+
+    resize: vertical;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+}
+
+.note-editor input::placeholder,
+.note-editor textarea::placeholder {
+    color:
+        rgba(105,70,80,.45);
+}
+
+
+/* =========================================================
+   COLOUR OPTIONS
+   ========================================================= */
+
+.color-section {
+    margin-top: 12px;
+}
+
+.color-section > span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    color: #8e6370;
+}
+
+.color-options {
+    display: flex;
+
+    gap: 8px;
+}
+
+.color-option {
+    width: 27px;
+    height: 27px;
+
+    border:
+        2px solid
+        rgba(255,255,255,.8);
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.color-option:hover {
+    transform:
+        scale(1.1);
+}
+
+.color-option.active {
+    transform:
+        scale(1.12);
+
+    box-shadow:
+        0 0 0 2px
+        #a85f77;
+}
+
+.color-option.yellow {
+    background: #ffed91;
+}
+
+.color-option.pink {
+    background: #ffc4d5;
+}
+
+.color-option.lavender {
+    background: #d9c9fa;
+}
+
+.color-option.mint {
+    background: #c6ebd1;
+}
+
+.color-option.peach {
+    background: #ffccb0;
+}
+
+
+/* =========================================================
+   EDITOR ACTIONS
+   ========================================================= */
+
+.editor-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 7px;
+
+    margin-top: 14px;
+}
+
+.editor-actions button {
+    min-height: 35px;
+
+    padding:
+        0
+        11px;
+
+    border-radius: 10px;
+
+    font-size: 7px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease;
+}
+
+.editor-actions button:active {
+    transform:
+        scale(.92);
+}
+
+.cancel-button {
+    border:
+        1px solid
+        rgba(100,70,80,.15);
+
+    background:
+        rgba(255,255,255,.35);
+
+    color: #76525f;
+}
+
+.save-note-button {
+    border: 0;
+
+    background:
+        #d66f91;
+
+    color: white;
+
+    box-shadow:
+        0 7px 18px
+        rgba(150,70,95,.18);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.notes-footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 25px;
+
+    text-align: center;
+}
+
+.notes-footer span {
+    font-size: 8px;
+
+    color: #edaac0;
+}
+
+.notes-footer p {
+    font-size: 6px;
+
+    color: #b18b98;
+}
+
+.notes-footer strong {
+    color: #d37492;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width: 650px) {
+
+    .notes-wall {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0,1fr)
+            );
+
+        gap: 16px;
+    }
+
+    .sticky-note {
+        min-height: 190px;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+@media (min-width: 950px) {
+
+    .notes-page {
+        padding-top: 22px;
+    }
+
+    .notes-wall {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0,1fr)
+            );
+
+        gap: 18px;
+    }
+
+    .sticky-note {
+        min-height: 205px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 390px) {
+
+    .notes-page {
+        width:
+            calc(100% - 12px);
+    }
+
+    .notes-brand strong {
+        font-size: 12px;
+    }
+
+    .save-status {
+        padding:
+            6px
+            7px;
+
+        font-size: 5px;
+    }
+
+    .notes-wall {
+        gap: 9px;
+    }
+
+    .sticky-note {
+        min-height: 155px;
+
+        padding:
+            22px
+            10px
+            10px;
+    }
+
+    .note-title {
+        font-size: 12px;
+    }
+
+    .note-content {
+        font-size: 8px;
+    }
+
+    .note-date {
+        left: 10px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: .01ms !important;
+
+        scroll-behavior: auto !important;
+    }
+}

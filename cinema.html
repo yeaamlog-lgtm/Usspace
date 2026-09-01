@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>USSPACE • Cinema</title>
+
+    <link
+        rel="stylesheet"
+        href="cinema.css"
+    >
+</head>
+
+<body>
+
+    <!-- Sakura Background -->
+    <div
+        class="sakura-container"
+        id="sakuraContainer"
+    ></div>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+
+    <main class="cinema-page">
+
+
+        <!-- HEADER -->
+        <header class="cinema-header">
+
+            <a
+                href="home.html"
+                class="back-button"
+            >
+                ←
+            </a>
+
+            <div class="cinema-brand">
+
+                <span class="brand-icon">
+                    🎬
+                </span>
+
+                <div>
+
+                    <strong>
+                        US<span>SPACE</span>
+                    </strong>
+
+                    <small>
+                        PRIVATE CINEMA
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div
+                class="connection-pill"
+                id="connectionPill"
+            >
+
+                <span
+                    class="connection-dot"
+                    id="connectionDot"
+                ></span>
+
+                <span id="connectionText">
+                    Connecting
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- TITLE -->
+        <section class="cinema-intro">
+
+            <p class="eyebrow">
+                TOGETHER • WATCH • RELAX
+            </p>
+
+            <h1>
+                Cinema
+                <span>Together</span>
+            </h1>
+
+            <p>
+                Your own little private theatre. 🍿
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO + CINEMA LAYOUT
+             ================================================= -->
+
+        <section class="cinema-layout">
+
+
+            <!-- =================================================
+                 YOUR SCREEN
+                 ================================================= -->
+
+            <div class="person-screen-card">
+
+                <div class="person-screen-header">
+
+                    <div class="person-avatar">
+                        🌸
+                    </div>
+
+                    <div>
+
+                        <strong id="localName">
+                            Prakhar
+                        </strong>
+
+                        <small>
+                            You
+                        </small>
+
+                    </div>
+
+                    <span
+                        class="camera-status"
+                        id="localCameraStatus"
+                    >
+                        ●
+                    </span>
+
+                </div>
+
+
+                <div class="person-video-wrapper">
+
+                    <video
+                        id="localVideo"
+                        autoplay
+                        muted
+                        playsinline
+                    ></video>
+
+
+                    <div
+                        class="camera-off"
+                        id="localCameraOff"
+                    >
+                        <span>
+                            🌸
+                        </span>
+
+                        <strong>
+                            Camera Off
+                        </strong>
+                    </div>
+
+
+                    <div class="video-name-tag">
+                        You
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PARTNER SCREEN
+                 ================================================= -->
+
+            <div class="person-screen-card">
+
+                <div class="person-screen-header">
+
+                    <div class="person-avatar">
+                        💕
+                    </div>
+
+                    <div>
+
+                        <strong id="partnerName">
+                            Pratishtha
+                        </strong>
+
+                        <small id="partnerVideoStatus">
+                            Connecting...
+                        </small>
+
+                    </div>
+
+                    <span
+                        class="camera-status"
+                        id="partnerCameraStatus"
+                    >
+                        ●
+                    </span>
+
+                </div>
+
+
+                <div class="person-video-wrapper">
+
+                    <video
+                        id="remoteVideo"
+                        autoplay
+                        playsinline
+                    ></video>
+
+
+                    <div
+                        class="partner-waiting"
+                        id="partnerWaiting"
+                    >
+
+                        <div class="waiting-flower">
+                            🌸
+                        </div>
+
+                        <strong>
+                            Waiting for partner
+                        </strong>
+
+                        <small>
+                            They'll appear here
+                            when they join.
+                        </small>
+
+                    </div>
+
+
+                    <div class="video-name-tag">
+                        Partner
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 THEATRE / CINEMA
+                 ================================================= -->
+
+            <section class="cinema-card">
+
+
+                <div class="theatre-heading">
+
+                    <div>
+
+                        <span>
+                            🎬 PRIVATE THEATRE
+                        </span>
+
+                        <strong>
+                            Movie Night
+                        </strong>
+
+                    </div>
+
+                    <div
+                        class="sync-status"
+                        id="syncStatus"
+                    >
+                        <span>
+                            🌸
+                        </span>
+
+                        <small>
+                            Waiting...
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SCREEN -->
+
+                <div
+                    class="cinema-screen"
+                    id="cinemaScreen"
+                >
+
+                    <video
+                        id="cinemaVideo"
+                        playsinline
+                        preload="metadata"
+                    ></video>
+
+
+                    <div
+                        class="screen-empty"
+                        id="screenEmpty"
+                    >
+
+                        <div class="screen-icon">
+                            🍿
+                        </div>
+
+                        <strong>
+                            Your theatre awaits
+                        </strong>
+
+                        <small>
+                            Choose something to watch
+                            together.
+                        </small>
+
+                    </div>
+
+
+                    <div
+                        class="video-loading"
+                        id="videoLoading"
+                    >
+
+                        <div class="loading-spinner"></div>
+
+                        <span>
+                            Loading...
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="center-play"
+                        id="centerPlay"
+                        type="button"
+                    >
+                        ▶
+                    </button>
+
+
+                    <!-- CONTROLS -->
+
+                    <div
+                        class="video-controls"
+                        id="videoControls"
+                    >
+
+                        <button
+                            id="playButton"
+                            type="button"
+                        >
+                            ▶
+                        </button>
+
+                        <span
+                            class="time-label"
+                            id="currentTime"
+                        >
+                            0:00
+                        </span>
+
+                        <input
+                            type="range"
+                            id="progressBar"
+                            min="0"
+                            max="100"
+                            value="0"
+                            step="0.1"
+                        >
+
+                        <span
+                            class="time-label"
+                            id="duration"
+                        >
+                            0:00
+                        </span>
+
+                        <button
+                            id="fullscreenButton"
+                            type="button"
+                        >
+                            ⛶
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOVIE INFO -->
+
+                <div class="movie-info">
+
+                    <div class="movie-icon">
+                        🍿
+                    </div>
+
+                    <div>
+
+                        <span>
+                            NOW WATCHING
+                        </span>
+
+                        <strong
+                            id="movieTitle"
+                        >
+                            Nothing selected
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- URL -->
+
+                <div class="source-section">
+
+                    <label for="videoUrl">
+                        Video URL
+                    </label>
+
+                    <div class="url-row">
+
+                        <input
+                            type="url"
+                            id="videoUrl"
+                            placeholder="Paste a video URL..."
+                            autocomplete="off"
+                        >
+
+                        <button
+                            id="loadUrlButton"
+                            type="button"
+                        >
+                            Load
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOCAL VIDEO -->
+
+                <div class="file-section">
+
+                    <label for="videoFile">
+                        Or choose a video
+                    </label>
+
+                    <label
+                        class="file-button"
+                        for="videoFile"
+                    >
+                        📁
+                        <span>
+                            Choose video
+                        </span>
+                    </label>
+
+                    <input
+                        type="file"
+                        id="videoFile"
+                        accept="video/*"
+                        hidden
+                    >
+
+                    <p
+                        class="file-name"
+                        id="fileName"
+                    >
+                        No file selected
+                    </p>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- =================================================
+             VIDEO CONTROLS
+             ================================================= -->
+
+        <section class="video-actions">
+
+            <button
+                id="cameraToggle"
+                type="button"
+            >
+                📹
+                <span>
+                    Camera
+                </span>
+            </button>
+
+            <button
+                id="switchCamera"
+                type="button"
+            >
+                🔄
+                <span>
+                    Switch Camera
+                </span>
+            </button>
+
+            <button
+                id="leaveCinema"
+                type="button"
+                class="leave-button"
+            >
+                🚪
+                <span>
+                    Leave
+                </span>
+            </button>
+
+        </section>
+
+
+        <!-- PARTNER STATUS -->
+
+        <section class="partner-status-card">
+
+            <div class="partner-avatar">
+                💕
+            </div>
+
+            <div class="partner-info">
+
+                <strong>
+                    <span id="partnerStatusName">
+                        Pratishtha
+                    </span>
+                </strong>
+
+                <small id="partnerStatus">
+                    is waiting to watch with you...
+                </small>
+
+            </div>
+
+            <span
+                class="live-dot"
+                id="liveDot"
+            ></span>
+
+        </section>
+
+
+        <!-- NOTE -->
+
+        <div class="cinema-note">
+
+            <span>🌸</span>
+
+            <p>
+                Two screens, one movie,
+                one little memory.
+            </p>
+
+            <span>🌸</span>
+
+        </div>
+
+
+        <footer class="cinema-footer">
+
+            <span>🌸</span>
+
+            <p>
+                Your private
+                <strong>USSPACE Cinema</strong>.
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+    </main>
+
+
+    <script src="cinema.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "usspace",
+  "version": "1.0.0",
+  "description": "USSPACE private two-player web space",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,1357 @@
+/* =========================================================
+   USSPACE — CANVAS.CSS
+   Shared Canvas • Sakura UI
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #fff7fa;
+    --white: #ffffff;
+    --pink: #df7195;
+    --pink-light: #f5b6ca;
+    --pink-soft: #ffe8f0;
+    --pink-pale: #fff3f7;
+
+    --text: #60404d;
+    --muted: #a98794;
+
+    --border: rgba(222, 132, 163, .25);
+
+    --shadow:
+        0 20px 55px rgba(154, 73, 105, .12);
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+html {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 8% 5%,
+            rgba(255,255,255,.95),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 94% 12%,
+            rgba(255,205,222,.55),
+            transparent 31%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(255,225,236,.65),
+            transparent 42%
+        ),
+        linear-gradient(
+            135deg,
+            #fffafd,
+            #fff0f5
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+   ========================================================= */
+
+.background-glow {
+    position: fixed;
+
+    width: 260px;
+    height: 260px;
+
+    border-radius: 50%;
+
+    filter: blur(65px);
+
+    opacity: .25;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+.glow-one {
+    top: 8%;
+    left: -150px;
+
+    background: #ffc6d9;
+
+    animation:
+        glowOne 10s ease-in-out infinite;
+}
+
+.glow-two {
+    right: -150px;
+    bottom: 8%;
+
+    background: #f1bfd2;
+
+    animation:
+        glowTwo 12s ease-in-out infinite;
+}
+
+@keyframes glowOne {
+
+    0%,100% {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(45px,30px);
+    }
+}
+
+@keyframes glowTwo {
+
+    0%,100% {
+        transform: translate(0,0);
+    }
+
+    50% {
+        transform: translate(-40px,-30px);
+    }
+}
+
+
+/* =========================================================
+   SAKURA PETALS
+   ========================================================= */
+
+.sakura-container {
+    position: fixed;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+.sakura-petal {
+    position: absolute;
+
+    top: -25px;
+
+    width: 11px;
+    height: 7px;
+
+    border-radius:
+        80% 20% 80% 20%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eda2bb,
+            #fad0dd
+        );
+
+    opacity: .45;
+
+    animation:
+        petalFall linear forwards;
+}
+
+@keyframes petalFall {
+
+    0% {
+        transform:
+            translate3d(0,-20px,0)
+            rotate(0deg);
+    }
+
+    25% {
+        transform:
+            translate3d(28px,25vh,0)
+            rotate(90deg);
+    }
+
+    50% {
+        transform:
+            translate3d(-25px,50vh,0)
+            rotate(180deg);
+    }
+
+    75% {
+        transform:
+            translate3d(24px,75vh,0)
+            rotate(270deg);
+    }
+
+    100% {
+        transform:
+            translate3d(-18px,110vh,0)
+            rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.canvas-page {
+    position: relative;
+
+    z-index: 5;
+
+    width:
+        min(
+            calc(100% - 22px),
+            1050px
+        );
+
+    min-height: 100vh;
+
+    margin: auto;
+
+    padding:
+        13px
+        0
+        28px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.canvas-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 23px;
+
+    animation:
+        headerIn .65s ease both;
+}
+
+@keyframes headerIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.back-button {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 13px;
+
+    background:
+        rgba(255,255,255,.72);
+
+    color: #936276;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    backdrop-filter: blur(12px);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.back-button:hover {
+    transform: translateX(-3px);
+
+    box-shadow:
+        0 8px 20px
+        rgba(170,75,110,.09);
+}
+
+.back-button:active {
+    transform: scale(.9);
+}
+
+.canvas-brand {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.brand-flower {
+    font-size: 21px;
+
+    animation:
+        flowerFloat 3s ease-in-out infinite;
+}
+
+@keyframes flowerFloat {
+
+    0%,100% {
+        transform:
+            translateY(0)
+            rotate(0);
+    }
+
+    50% {
+        transform:
+            translateY(-4px)
+            rotate(5deg);
+    }
+}
+
+.canvas-brand strong {
+    display: block;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.canvas-brand strong span {
+    color: var(--pink);
+}
+
+.canvas-brand small {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 5px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+
+    color: #b08a99;
+}
+
+.connection-pill {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding:
+        7px
+        9px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,.7);
+
+    color: #9c7586;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    backdrop-filter: blur(10px);
+}
+
+.connection-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #dfb9c6;
+
+    transition:
+        background .3s ease;
+}
+
+.connection-dot.connected {
+    background: #83c99c;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(131,201,156,.12);
+
+    animation:
+        connectionPulse 2s infinite;
+}
+
+.connection-dot.connecting {
+    background: #e4b4c5;
+
+    animation:
+        connectionBlink 1s infinite;
+}
+
+.connection-dot.offline {
+    background: #d77d95;
+}
+
+@keyframes connectionPulse {
+
+    0%,100% {
+        box-shadow:
+            0 0 0 3px
+            rgba(131,201,156,.1);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 7px
+            rgba(131,201,156,.03);
+    }
+}
+
+@keyframes connectionBlink {
+
+    0%,100% {
+        opacity: .35;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.canvas-intro {
+    text-align: center;
+
+    margin:
+        6px
+        auto
+        20px;
+
+    animation:
+        introIn .7s .08s ease both;
+}
+
+@keyframes introIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.eyebrow {
+    margin-bottom: 7px;
+
+    font-size: 6px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    color: #cf7b99;
+}
+
+.canvas-intro h1 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(
+            27px,
+            8vw,
+            48px
+        );
+
+    font-weight: 600;
+
+    letter-spacing: -.8px;
+
+    color: #603c4b;
+}
+
+.canvas-intro h1 span {
+    color: var(--pink);
+}
+
+.canvas-intro > p:last-child {
+    max-width: 420px;
+
+    margin:
+        7px
+        auto
+        0;
+
+    font-size: 8px;
+
+    line-height: 1.6;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   CANVAS CARD
+   ========================================================= */
+
+.canvas-card {
+    position: relative;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(222,132,163,.28);
+
+    border-radius: 25px;
+
+    background:
+        rgba(255,255,255,.78);
+
+    box-shadow:
+        var(--shadow);
+
+    backdrop-filter:
+        blur(18px);
+
+    animation:
+        cardIn .75s .15s ease both;
+}
+
+@keyframes cardIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(18px)
+            scale(.985);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.canvas-topbar {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding:
+        12px
+        13px;
+
+    border-bottom:
+        1px solid
+        rgba(222,132,163,.15);
+}
+
+.partner-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 0;
+}
+
+.status-flower {
+    width: 35px;
+    height: 35px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #ffe8f0
+        );
+
+    font-size: 16px;
+}
+
+.partner-status strong {
+    display: block;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    color: #684351;
+}
+
+.partner-status small {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 6px;
+
+    color: #aa8492;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DRAWING TOOLS
+   ========================================================= */
+
+.drawing-tools {
+    display: flex;
+
+    gap: 5px;
+}
+
+.tool-button {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.8);
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+}
+
+.tool-button.active {
+    background:
+        var(--pink-soft);
+
+    border-color:
+        rgba(223,113,149,.35);
+}
+
+.tool-button:hover {
+    transform: translateY(-2px);
+}
+
+.tool-button:active {
+    transform: scale(.88);
+}
+
+
+/* =========================================================
+   DRAWING WRAPPER
+   ========================================================= */
+
+.drawing-wrapper {
+    position: relative;
+
+    width: 100%;
+
+    height:
+        clamp(
+            330px,
+            65vw,
+            570px
+        );
+
+    overflow: hidden;
+
+    background:
+        #fffdfd;
+}
+
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
+
+#drawingCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    cursor:
+        crosshair;
+
+    touch-action: none;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.98),
+            rgba(255,250,252,.98)
+        );
+
+    transition:
+        opacity .3s ease;
+}
+
+#drawingCanvas.drawing {
+    cursor:
+        crosshair;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.canvas-empty {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    pointer-events: none;
+
+    transition:
+        opacity .35s ease;
+}
+
+.canvas-empty.hidden {
+    opacity: 0;
+}
+
+.empty-flower {
+    width: 60px;
+    height: 60px;
+
+    display: grid;
+    place-items: center;
+
+    margin-bottom: 10px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #ffedf3
+        );
+
+    box-shadow:
+        0 12px 30px
+        rgba(190,90,125,.09);
+
+    font-size: 26px;
+
+    animation:
+        emptyFloat 3.5s ease-in-out infinite;
+}
+
+@keyframes emptyFloat {
+
+    0%,100% {
+        transform:
+            translateY(0);
+    }
+
+    50% {
+        transform:
+            translateY(-6px);
+    }
+}
+
+.canvas-empty strong {
+    font-size: 11px;
+
+    color: #754b5b;
+}
+
+.canvas-empty small {
+    max-width: 210px;
+
+    margin-top: 5px;
+
+    font-size: 6px;
+
+    line-height: 1.5;
+
+    color: #b08a98;
+}
+
+
+/* =========================================================
+   CANVAS CONTROLS
+   ========================================================= */
+
+.canvas-controls {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    padding:
+        11px
+        12px;
+
+    border-top:
+        1px solid
+        rgba(222,132,163,.15);
+
+    background:
+        rgba(255,250,252,.75);
+}
+
+.control-group {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+.control-label {
+    font-size: 6px;
+
+    font-weight: 900;
+
+    color: #a17687;
+}
+
+#brushSize {
+    width: 75px;
+
+    accent-color:
+        var(--pink);
+
+    cursor: pointer;
+}
+
+#brushColor {
+    width: 29px;
+    height: 29px;
+
+    padding: 2px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 9px;
+
+    background: white;
+
+    cursor: pointer;
+}
+
+.canvas-action {
+    min-width: 48px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    margin-left: auto;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255,255,255,.85);
+
+    color: #835669;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+}
+
+.canvas-action + .canvas-action {
+    margin-left: 0;
+}
+
+.canvas-action:hover {
+    background:
+        var(--pink-soft);
+
+    transform:
+        translateY(-2px);
+}
+
+.canvas-action:active {
+    transform:
+        scale(.9);
+}
+
+.canvas-action span {
+    font-size: 6px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   DRAWING STATUS
+   ========================================================= */
+
+.drawing-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    width:
+        min(
+            100%,
+            500px
+        );
+
+    margin:
+        13px
+        auto
+        0;
+
+    padding:
+        10px
+        12px;
+
+    border:
+        1px solid
+        rgba(222,132,163,.2);
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,.62);
+
+    backdrop-filter:
+        blur(12px);
+
+    animation:
+        statusIn .7s .25s ease both;
+}
+
+@keyframes statusIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.status-avatar {
+    width: 32px;
+    height: 32px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 11px;
+
+    background:
+        #fff0f5;
+
+    font-size: 14px;
+}
+
+.drawing-status strong {
+    display: block;
+
+    font-size: 8px;
+
+    color: #704655;
+}
+
+.drawing-status small {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 6px;
+
+    color: #aa8492;
+}
+
+.live-dot {
+    width: 7px;
+    height: 7px;
+
+    margin-left: auto;
+
+    border-radius: 50%;
+
+    background: #dfb9c6;
+}
+
+.live-dot.active {
+    background: #83c99c;
+
+    box-shadow:
+        0 0 0 5px
+        rgba(131,201,156,.1);
+
+    animation:
+        livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+
+    0%,100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .45;
+    }
+}
+
+
+/* =========================================================
+   NOTE
+   ========================================================= */
+
+.canvas-note {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 19px;
+
+    text-align: center;
+}
+
+.canvas-note span {
+    font-size: 9px;
+
+    color: #edaac0;
+}
+
+.canvas-note p {
+    font-size: 6px;
+
+    letter-spacing: .3px;
+
+    color: #ae8795;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.canvas-footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    margin-top: 17px;
+}
+
+.canvas-footer span {
+    font-size: 8px;
+
+    color: #edaac0;
+}
+
+.canvas-footer p {
+    font-size: 6px;
+
+    color: #b18b98;
+}
+
+.canvas-footer strong {
+    color: #d37492;
+}
+
+
+/* =========================================================
+   TABLET / DESKTOP
+   ========================================================= */
+
+@media (min-width: 700px) {
+
+    .canvas-page {
+        padding-top: 24px;
+    }
+
+    .canvas-header {
+        margin-bottom: 30px;
+    }
+
+    .canvas-card {
+        border-radius: 29px;
+    }
+
+    .canvas-topbar {
+        padding:
+            14px
+            17px;
+    }
+
+    .canvas-controls {
+        padding:
+            13px
+            17px;
+    }
+
+    .drawing-status {
+        margin-top: 17px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .canvas-page {
+        width:
+            calc(100% - 14px);
+
+        padding-top: 9px;
+    }
+
+    .canvas-header {
+        margin-bottom: 18px;
+    }
+
+    .back-button {
+        width: 37px;
+        height: 37px;
+    }
+
+    .canvas-brand strong {
+        font-size: 12px;
+    }
+
+    .canvas-brand small {
+        font-size: 4px;
+    }
+
+    .connection-pill {
+        padding:
+            6px
+            7px;
+
+        font-size: 5px;
+    }
+
+    .canvas-intro h1 {
+        font-size: 28px;
+    }
+
+    .canvas-intro > p:last-child {
+        font-size: 7px;
+    }
+
+    .canvas-card {
+        border-radius: 20px;
+    }
+
+    .drawing-wrapper {
+        height:
+            72vw;
+
+        min-height: 280px;
+    }
+
+    .canvas-controls {
+        gap: 6px;
+    }
+
+    .control-label {
+        display: none;
+    }
+
+    #brushSize {
+        width: 65px;
+    }
+
+    .canvas-action {
+        min-width: 42px;
+        height: 32px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 340px) {
+
+    .canvas-intro h1 {
+        font-size: 25px;
+    }
+
+    .drawing-wrapper {
+        min-height: 250px;
+    }
+
+    .canvas-controls {
+        gap: 5px;
+    }
+
+    #brushSize {
+        width: 55px;
+    }
+
+    .canvas-action {
+        min-width: 37px;
+    }
+
+    .canvas-action span {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: .01ms !important;
+
+        scroll-behavior: auto !important;
+    }
+}

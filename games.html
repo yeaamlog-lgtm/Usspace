@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff1f6"
+    >
+
+    <title>USSPACE • Games</title>
+
+    <link
+        rel="stylesheet"
+        href="games.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SAKURA BACKGROUND
+         ===================================================== -->
+
+    <div
+        class="sakura-container"
+        id="sakuraContainer"
+    ></div>
+
+    <div class="bg-glow glow-one"></div>
+    <div class="bg-glow glow-two"></div>
+
+
+
+    <!-- =====================================================
+         MAIN PAGE
+         ===================================================== -->
+
+    <main class="games-page">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <header class="games-header">
+
+
+            <a
+                href="home.html"
+                class="back-button"
+                aria-label="Back to home"
+            >
+                ←
+            </a>
+
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🎮
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        US<span>SPACE</span>
+                    </strong>
+
+                    <small>
+                        OUR LITTLE PLAYGROUND
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="players">
+
+                <span>👤</span>
+                <span>💕</span>
+                <span>👤</span>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             HERO
+             ================================================= -->
+
+        <section class="games-hero">
+
+
+            <div class="hero-decoration">
+                ✨ 🌸 ✨
+            </div>
+
+
+            <p class="eyebrow">
+                TWO PLAYERS • ONE SPACE
+            </p>
+
+
+            <h1>
+                Let's
+                <span>Play</span>
+            </h1>
+
+
+            <p>
+                A little competition,
+                a lot of fun. 💕
+            </p>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             GAME SECTION
+             ================================================= -->
+
+        <section class="games-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p>
+                        CHOOSE A GAME
+                    </p>
+
+                    <h2>
+                        Pick your battle
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="games-grid">
+
+
+
+                <!-- =========================================
+                     DRAW & GUESS
+                     ========================================= -->
+
+                <button
+                    class="game-card game-draw"
+                    data-game="draw-guess"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        🎨
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Draw & Guess
+                        </h3>
+
+                        <p>
+                            One draws,
+                            the other guesses.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =========================================
+                     TIC TAC TOE
+                     ========================================= -->
+
+                <button
+                    class="game-card game-tictactoe"
+                    data-game="tic-tac-toe"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        ⭕
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Tic-Tac-Toe
+                        </h3>
+
+                        <p>
+                            Classic Xs and Os.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =========================================
+                     CONNECT FOUR
+                     ========================================= -->
+
+                <button
+                    class="game-card game-connect"
+                    data-game="connect-four"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        🟡
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Connect Four
+                        </h3>
+
+                        <p>
+                            Four in a row wins.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =========================================
+                     EMOJI GUESS
+                     ========================================= -->
+
+                <button
+                    class="game-card game-emoji"
+                    data-game="emoji-guess"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        😀
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Emoji Guess
+                        </h3>
+
+                        <p>
+                            Decode the emoji clue.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =========================================
+                     MEMORY MATCH
+                     ========================================= -->
+
+                <button
+                    class="game-card game-memory"
+                    data-game="memory-match"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        🃏
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Memory Match
+                        </h3>
+
+                        <p>
+                            Find the matching pairs.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =========================================
+                     DOTS
+                     ========================================= -->
+
+                <button
+                    class="game-card game-dots"
+                    data-game="dots"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        ✦
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Dots & Boxes
+                        </h3>
+
+                        <p>
+                            Complete the most boxes.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+                <!-- =========================================
+                     GUESS
+                     ========================================= -->
+
+                <button
+                    class="game-card game-guess"
+                    data-game="guess"
+                    type="button"
+                >
+
+                    <div class="game-icon">
+                        🎯
+                    </div>
+
+
+                    <div class="game-info">
+
+                        <h3>
+                            Guess It
+                        </h3>
+
+                        <p>
+                            Find the hidden number.
+                        </p>
+
+                        <span class="game-mode">
+                            2 PLAYERS
+                        </span>
+
+                    </div>
+
+
+                    <span class="game-arrow">
+                        →
+                    </span>
+
+                </button>
+
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PLAYER STATUS
+             ================================================= -->
+
+        <section class="player-status">
+
+
+            <div class="status-avatar">
+                👤
+            </div>
+
+
+            <div class="status-text">
+
+                <strong id="playerName">
+                    You
+                </strong>
+
+                <span>
+                    Ready to play 🌸
+                </span>
+
+            </div>
+
+
+            <div
+                class="online-indicator"
+                id="partnerStatus"
+            >
+
+                <span></span>
+
+                Partner
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="games-footer">
+
+            <span>🌸</span>
+
+            <p>
+                May the best
+                <strong>player</strong>
+                win.
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+         ===================================================== -->
+
+    <script src="games.js"></script>
+
+</body>
+
+</html>

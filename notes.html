@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>USSPACE • Notes</title>
+
+    <link
+        rel="stylesheet"
+        href="notes.css"
+    >
+</head>
+
+<body>
+
+    <!-- Sakura -->
+    <div
+        class="sakura-container"
+        id="sakuraContainer"
+    ></div>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+
+    <main class="notes-page">
+
+
+        <!-- HEADER -->
+        <header class="notes-header">
+
+            <a
+                href="home.html"
+                class="back-button"
+            >
+                ←
+            </a>
+
+
+            <div class="notes-brand">
+
+                <span class="brand-icon">
+                    📝
+                </span>
+
+                <div>
+
+                    <strong>
+                        US<span>SPACE</span>
+                    </strong>
+
+                    <small>
+                        OUR LITTLE NOTES
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="save-status"
+                id="saveStatus"
+            >
+                <span
+                    class="status-dot"
+                    id="statusDot"
+                ></span>
+
+                <span id="statusText">
+                    Saved
+                </span>
+            </div>
+
+        </header>
+
+
+        <!-- INTRO -->
+        <section class="notes-intro">
+
+            <p class="eyebrow">
+                LITTLE THOUGHTS • LITTLE MEMORIES
+            </p>
+
+            <h1>
+                Our
+                <span>Notes</span>
+            </h1>
+
+            <p>
+                Leave little messages for each other. 💕
+            </p>
+
+        </section>
+
+
+        <!-- TOOLBAR -->
+        <section class="notes-toolbar">
+
+            <button
+                class="add-note-button"
+                id="addNoteButton"
+                type="button"
+            >
+                <span>＋</span>
+                New Note
+            </button>
+
+
+            <div class="notes-count">
+
+                <span id="notesCount">
+                    0
+                </span>
+
+                <small>
+                    little notes
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- NOTES WALL -->
+        <section
+            class="notes-wall"
+            id="notesWall"
+        >
+
+            <!-- Empty State -->
+
+            <div
+                class="empty-notes"
+                id="emptyNotes"
+            >
+
+                <div class="empty-icon">
+                    🌸
+                </div>
+
+                <h2>
+                    Nothing here yet
+                </h2>
+
+                <p>
+                    Leave your first little
+                    note for your partner.
+                </p>
+
+                <button
+                    id="emptyAddButton"
+                    type="button"
+                >
+                    ＋ Write a Note
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- NOTE EDITOR MODAL -->
+        <div
+            class="note-modal"
+            id="noteModal"
+            aria-hidden="true"
+        >
+
+            <div
+                class="modal-backdrop"
+                id="modalBackdrop"
+            ></div>
+
+
+            <div class="note-editor">
+
+                <button
+                    class="close-editor"
+                    id="closeEditor"
+                    type="button"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+
+                <div class="editor-pin">
+                    📌
+                </div>
+
+
+                <p class="editor-label">
+                    WRITE SOMETHING
+                </p>
+
+
+                <input
+                    type="text"
+                    id="noteTitle"
+                    maxlength="60"
+                    placeholder="A tiny title..."
+                    autocomplete="off"
+                >
+
+
+                <textarea
+                    id="noteContent"
+                    maxlength="500"
+                    placeholder="Write something for your partner..."
+                ></textarea>
+
+
+                <!-- COLOR PICKER -->
+
+                <div class="color-section">
+
+                    <span>
+                        Note colour
+                    </span>
+
+                    <div class="color-options">
+
+                        <button
+                            class="color-option yellow active"
+                            data-color="yellow"
+                            type="button"
+                            aria-label="Yellow"
+                        ></button>
+
+                        <button
+                            class="color-option pink"
+                            data-color="pink"
+                            type="button"
+                            aria-label="Pink"
+                        ></button>
+
+                        <button
+                            class="color-option lavender"
+                            data-color="lavender"
+                            type="button"
+                            aria-label="Lavender"
+                        ></button>
+
+                        <button
+                            class="color-option mint"
+                            data-color="mint"
+                            type="button"
+                            aria-label="Mint"
+                        ></button>
+
+                        <button
+                            class="color-option peach"
+                            data-color="peach"
+                            type="button"
+                            aria-label="Peach"
+                        ></button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EDITOR ACTIONS -->
+
+                <div class="editor-actions">
+
+                    <button
+                        class="cancel-button"
+                        id="cancelNote"
+                        type="button"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        class="save-note-button"
+                        id="saveNote"
+                        type="button"
+                    >
+                        ✨ Save Note
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <footer class="notes-footer">
+
+            <span>🌸</span>
+
+            <p>
+                Little words can become
+                <strong>big memories</strong>.
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+    </main>
+
+
+    <script src="notes.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,465 @@
+/* =========================================================
+   USSPACE • GUESS THE NUMBER
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --pink: #d97898;
+    --rose: #b7607e;
+    --text: #674851;
+    --muted: #a58791;
+    --border: rgba(190,110,137,.15);
+}
+
+body {
+    min-height: 100vh;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    color: var(--text);
+
+    background:
+        radial-gradient(circle at 12% 7%,#f9dce7,transparent 29%),
+        radial-gradient(circle at 90% 88%,#f9e5ed,transparent 32%),
+        linear-gradient(145deg,#fffafd,#fff3f7);
+}
+
+.sakura-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sakura-petal {
+    position: absolute;
+    top: -20px;
+    width: 9px;
+    height: 7px;
+    border-radius: 100% 0 100% 0;
+    background: #f3b8ca;
+    opacity: .55;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translate(40px,110vh) rotate(320deg);
+    }
+}
+
+.game-page {
+    position: relative;
+    z-index: 2;
+    width: min(100%,760px);
+    margin: auto;
+    padding: 22px 18px 45px;
+}
+
+.game-header {
+    display: grid;
+    grid-template-columns: 46px 1fr auto;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 22px;
+}
+
+.back-btn {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    color: var(--rose);
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    font-size: 22px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: linear-gradient(145deg,#fff,#ffe8ef);
+}
+
+.brand h1 {
+    font: 500 20px Georgia,serif;
+}
+
+.brand p {
+    font-size: 7px;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border-radius: 30px;
+    background: rgba(255,255,255,.7);
+    border: 1px solid var(--border);
+}
+
+.connection-status span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #d99caf;
+}
+
+.connection-status small {
+    font-size: 9px;
+    color: var(--muted);
+}
+
+.players {
+    display: grid;
+    grid-template-columns: 1fr 42px 1fr;
+    gap: 7px;
+    align-items: center;
+}
+
+.player-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--border);
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #ffe9f0;
+}
+
+.player-card span {
+    display: block;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+}
+
+.player-card strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+}
+
+.player-card > strong {
+    margin-left: auto;
+    font: 500 18px Georgia,serif;
+}
+
+.versus {
+    text-align: center;
+    font-size: 8px;
+    color: var(--muted);
+}
+
+.status-card {
+    margin: 14px 0;
+    padding: 13px 15px;
+    border-radius: 17px;
+    background: rgba(255,255,255,.7);
+    border: 1px solid var(--border);
+}
+
+.status-card span {
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+}
+
+.status-card strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.turn-pill {
+    width: fit-content;
+    margin: 0 auto 17px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 13px;
+    border-radius: 30px;
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--border);
+    font-size: 9px;
+}
+
+.turn-pill i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pink);
+}
+
+.number-card {
+    width: min(100%,500px);
+    margin: auto;
+    padding: 30px 22px;
+    text-align: center;
+    border-radius: 27px;
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--border);
+    box-shadow: 0 25px 65px rgba(110,60,80,.1);
+}
+
+.number-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.number-range {
+    margin-top: 10px;
+    font: 500 42px Georgia,serif;
+    color: #76505d;
+}
+
+.hint {
+    margin: 10px 0 20px;
+    min-height: 18px;
+    font-size: 11px;
+    color: #a47b89;
+}
+
+.guess-box {
+    display: flex;
+    gap: 8px;
+}
+
+.guess-box input {
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    padding: 0 15px;
+    border: 1px solid var(--border);
+    outline: none;
+    border-radius: 15px;
+    background: rgba(255,250,252,.9);
+    color: var(--text);
+    font-size: 18px;
+    text-align: center;
+}
+
+.guess-box input:focus {
+    border-color: rgba(204,105,137,.4);
+    box-shadow: 0 0 0 4px rgba(217,121,152,.08);
+}
+
+.guess-box button {
+    height: 48px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 15px;
+    color: white;
+    background: linear-gradient(135deg,#d87d9b,#bd6483);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.guess-history {
+    margin-top: 17px;
+    max-height: 130px;
+    overflow-y: auto;
+}
+
+.empty-history {
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255,245,248,.7);
+    font-size: 9px;
+    color: var(--muted);
+}
+
+.guess-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 11px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    background: #fff4f7;
+    font-size: 10px;
+}
+
+.guess-item span {
+    color: var(--muted);
+}
+
+.guess-item strong {
+    color: #805463;
+}
+
+.guess-item.higher strong {
+    color: #c1708e;
+}
+
+.guess-item.lower strong {
+    color: #9b7481;
+}
+
+.game-info {
+    width: min(100%,500px);
+    margin: 17px auto;
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    text-align: center;
+}
+
+.game-info span {
+    display: block;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+}
+
+.game-info strong {
+    display: block;
+    margin-top: 3px;
+    font: 500 20px Georgia,serif;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 9px;
+}
+
+.controls button,
+.result-card button {
+    min-height: 43px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 14px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+#newGameButton,
+.result-card button {
+    color: white;
+    background: linear-gradient(135deg,#d87d9b,#bd6483);
+}
+
+#leaveButton {
+    color: #896573;
+    background: rgba(255,255,255,.72);
+    border: 1px solid var(--border);
+}
+
+.result-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(80,45,58,.18);
+    backdrop-filter: blur(10px);
+}
+
+.result-overlay.hidden {
+    display: none;
+}
+
+.result-card {
+    width: min(100%,340px);
+    padding: 32px 25px;
+    text-align: center;
+    border-radius: 28px;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 30px 80px rgba(70,40,52,.18);
+    animation: popup .35s ease;
+}
+
+@keyframes popup {
+    from {
+        opacity: 0;
+        transform: scale(.9) translateY(15px);
+    }
+}
+
+.result-card > div {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.result-card span {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.result-card h2 {
+    margin: 8px 0;
+    font: 500 28px Georgia,serif;
+}
+
+.result-card p {
+    margin-bottom: 20px;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.result-card button {
+    width: 100%;
+}
+
+@media(max-width:500px) {
+
+    .game-page {
+        padding: 16px 11px 35px;
+    }
+
+    .connection-status small {
+        display: none;
+    }
+
+    .brand h1 {
+        font-size: 17px;
+    }
+
+    .number-card {
+        padding: 25px 15px;
+    }
+
+    .number-range {
+        font-size: 35px;
+    }
+
+    .game-info {
+        gap: 40px;
+    }
+
+    .controls button {
+        flex: 1;
+        padding: 0 8px;
+    }
+}

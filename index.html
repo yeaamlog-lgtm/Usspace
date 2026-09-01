@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    >
+
+    <meta name="theme-color" content="#fff4f8">
+
+    <title>USSPACE ♡</title>
+
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <!-- Sakura Background -->
+    <div class="sakura-container" id="sakuraContainer"></div>
+
+    <!-- Main Login Screen -->
+    <main class="login-page">
+
+        <section class="login-card">
+
+            <!-- Logo -->
+            <div class="logo-area">
+                <div class="logo-flower">🌸</div>
+
+                <h1>US<span>SPACE</span></h1>
+
+                <p>A little space for just us ♡</p>
+            </div>
+
+            <!-- Decorative line -->
+            <div class="divider">
+                <span></span>
+                <b>♡</b>
+                <span></span>
+            </div>
+
+            <!-- Login -->
+            <form id="loginForm">
+
+                <!-- Username -->
+                <div class="input-group">
+
+                    <label for="username">
+                        WHO ARE YOU?
+                    </label>
+
+                    <div class="input-box">
+                        <span>♡</span>
+
+                        <select id="username" required>
+                            <option value="" disabled selected>
+                                Choose your name
+                            </option>
+
+                            <option value="prakhar">
+                                prakhar
+                            </option>
+
+                            <option value="pratishtha">
+                                pratishtha
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="input-group">
+
+                    <label for="password">
+                        OUR SECRET
+                    </label>
+
+                    <div class="input-box">
+
+                        <span>🔐</span>
+
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            aria-label="Show password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Error -->
+                <p
+                    id="loginError"
+                    class="login-error"
+                    aria-live="polite"
+                ></p>
+
+
+                <!-- Enter -->
+                <button
+                    type="submit"
+                    id="enterButton"
+                    class="enter-button"
+                >
+
+                    <span>ENTER USSPACE</span>
+
+                    <strong>♡</strong>
+
+                </button>
+
+            </form>
+
+
+            <!-- Footer -->
+            <div class="login-footer">
+
+                <span>🌸</span>
+
+                <p>Private space • Just for two</p>
+
+                <span>🌸</span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Login animation / functionality -->
+    <script src="index.js"></script>
+
+</body>
+</html>

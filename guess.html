@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff7fa"
+    >
+
+    <title>USSPACE • Guess the Number</title>
+
+    <link
+        rel="stylesheet"
+        href="guess.css"
+    >
+
+</head>
+
+<body>
+
+<div
+    class="sakura-layer"
+    id="sakuraLayer"
+></div>
+
+
+<main class="game-page">
+
+
+    <header class="game-header">
+
+        <a
+            href="games.html"
+            class="back-btn"
+        >
+            ←
+        </a>
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🎯
+            </div>
+
+            <div>
+
+                <h1>
+                    Guess the Number
+                </h1>
+
+                <p>
+                    HOW LUCKY ARE WE?
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="connection-status"
+            id="connectionStatus"
+        >
+
+            <span></span>
+
+            <small>
+                Connecting
+            </small>
+
+        </div>
+
+    </header>
+
+
+    <section class="players">
+
+        <div
+            class="player-card active"
+            id="youPlayer"
+        >
+
+            <div class="avatar">
+                🌸
+            </div>
+
+            <div>
+
+                <span>
+                    YOU
+                </span>
+
+                <strong id="youName">
+                    You
+                </strong>
+
+            </div>
+
+            <strong id="yourScore">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="versus">
+            VS
+        </div>
+
+
+        <div
+            class="player-card"
+            id="partnerPlayer"
+        >
+
+            <div class="avatar">
+                🌷
+            </div>
+
+            <div>
+
+                <span>
+                    PARTNER
+                </span>
+
+                <strong id="partnerName">
+                    Waiting...
+                </strong>
+
+            </div>
+
+            <strong id="partnerScore">
+                0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <section class="status-card">
+
+        <span>
+            GAME STATUS
+        </span>
+
+        <strong id="gameStatus">
+            Waiting for partner...
+        </strong>
+
+    </section>
+
+
+    <div class="turn-pill">
+
+        <i></i>
+
+        <span id="turnText">
+            Waiting for partner
+        </span>
+
+    </div>
+
+
+    <section class="number-card">
+
+        <div class="number-label">
+            GUESS A NUMBER
+        </div>
+
+        <div
+            class="number-range"
+            id="numberRange"
+        >
+            1 — 100
+        </div>
+
+
+        <div
+            class="hint"
+            id="hint"
+        >
+            I'm thinking of a number...
+        </div>
+
+
+        <div class="guess-box">
+
+            <input
+                id="guessInput"
+                type="number"
+                min="1"
+                max="100"
+                placeholder="?"
+                inputmode="numeric"
+            >
+
+            <button id="guessButton">
+                Guess
+            </button>
+
+        </div>
+
+
+        <div
+            class="guess-history"
+            id="guessHistory"
+        >
+
+            <div class="empty-history">
+                Your guesses will appear here
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="game-info">
+
+        <div>
+
+            <span>
+                ATTEMPTS
+            </span>
+
+            <strong id="attempts">
+                0
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                ROUND
+            </span>
+
+            <strong id="round">
+                1
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <section class="controls">
+
+        <button id="newGameButton">
+            🌸 New Game
+        </button>
+
+        <button id="leaveButton">
+            Leave Game
+        </button>
+
+    </section>
+
+
+    <div
+        class="result-overlay hidden"
+        id="resultOverlay"
+    >
+
+        <div class="result-card">
+
+            <div id="resultIcon">
+                🎯
+            </div>
+
+            <span>
+                ROUND COMPLETE
+            </span>
+
+            <h2 id="resultTitle">
+                You Got It!
+            </h2>
+
+            <p id="resultMessage">
+                Perfect guess ✨
+            </p>
+
+            <button id="resultNewGame">
+                Play Again
+            </button>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="guess.js"></script>
+
+</body>
+</html>

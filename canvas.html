@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>USSPACE • Canvas</title>
+
+    <link
+        rel="stylesheet"
+        href="canvas.css"
+    >
+</head>
+
+<body>
+
+    <!-- Sakura background -->
+    <div
+        class="sakura-container"
+        id="sakuraContainer"
+    ></div>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+
+    <!-- Main Page -->
+    <main class="canvas-page">
+
+
+        <!-- Header -->
+        <header class="canvas-header">
+
+            <a
+                href="home.html"
+                class="back-button"
+                aria-label="Back to home"
+            >
+                ←
+            </a>
+
+
+            <div class="canvas-brand">
+
+                <span class="brand-flower">
+                    🌸
+                </span>
+
+                <div>
+                    <strong>
+                        US<span>SPACE</span>
+                    </strong>
+
+                    <small>
+                        SHARED CANVAS
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div
+                class="connection-pill"
+                id="connectionPill"
+            >
+                <span
+                    class="connection-dot"
+                    id="connectionDot"
+                ></span>
+
+                <span id="connectionText">
+                    Connecting
+                </span>
+            </div>
+
+        </header>
+
+
+
+        <!-- Title -->
+        <section class="canvas-intro">
+
+            <p class="eyebrow">
+                TWO HEARTS • ONE CANVAS
+            </p>
+
+            <h1>
+                Draw
+                <span>Together</span>
+            </h1>
+
+            <p>
+                Create something cute together,
+                one little stroke at a time. 🌸
+            </p>
+
+        </section>
+
+
+
+        <!-- Canvas Card -->
+        <section class="canvas-card">
+
+            <div class="canvas-topbar">
+
+                <div class="partner-status">
+
+                    <span class="status-flower">
+                        🌸
+                    </span>
+
+                    <div>
+                        <strong>
+                            Shared Canvas
+                        </strong>
+
+                        <small id="canvasStatus">
+                            Waiting for your partner...
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="drawing-tools">
+
+                    <button
+                        class="tool-button active"
+                        id="penTool"
+                        type="button"
+                        aria-label="Pen"
+                    >
+                        ✏️
+                    </button>
+
+                    <button
+                        class="tool-button"
+                        id="eraserTool"
+                        type="button"
+                        aria-label="Eraser"
+                    >
+                        🧹
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Drawing Area -->
+            <div
+                class="drawing-wrapper"
+                id="drawingWrapper"
+            >
+
+                <canvas
+                    id="drawingCanvas"
+                ></canvas>
+
+
+                <div
+                    class="canvas-empty"
+                    id="canvasEmpty"
+                >
+                    <div class="empty-flower">
+                        🌸
+                    </div>
+
+                    <strong>
+                        Start drawing
+                    </strong>
+
+                    <small>
+                        Your partner will see
+                        your drawing live.
+                    </small>
+                </div>
+
+            </div>
+
+
+            <!-- Canvas Controls -->
+            <div class="canvas-controls">
+
+                <div class="control-group">
+
+                    <label
+                        for="brushSize"
+                        class="control-label"
+                    >
+                        Brush
+                    </label>
+
+                    <input
+                        type="range"
+                        id="brushSize"
+                        min="1"
+                        max="30"
+                        value="5"
+                    >
+
+                </div>
+
+
+                <div class="control-group">
+
+                    <label
+                        for="brushColor"
+                        class="control-label"
+                    >
+                        Color
+                    </label>
+
+                    <input
+                        type="color"
+                        id="brushColor"
+                        value="#d8789b"
+                    >
+
+                </div>
+
+
+                <button
+                    class="canvas-action"
+                    id="undoButton"
+                    type="button"
+                >
+                    ↶
+                    <span>Undo</span>
+                </button>
+
+
+                <button
+                    class="canvas-action"
+                    id="clearButton"
+                    type="button"
+                >
+                    🗑️
+                    <span>Clear</span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- Partner Drawing Indicator -->
+        <section class="drawing-status">
+
+            <div class="status-avatar">
+                💕
+            </div>
+
+            <div>
+
+                <strong id="partnerDrawingName">
+                    Pratishtha
+                </strong>
+
+                <small id="partnerDrawingStatus">
+                    is waiting for you...
+                </small>
+
+            </div>
+
+            <span
+                class="live-dot"
+                id="drawingLiveDot"
+            ></span>
+
+        </section>
+
+
+
+        <!-- Bottom Note -->
+        <div class="canvas-note">
+
+            <span>🌸</span>
+
+            <p>
+                Every little drawing becomes
+                a memory.
+            </p>
+
+            <span>🌸</span>
+
+        </div>
+
+
+        <!-- Footer -->
+        <footer class="canvas-footer">
+
+            <span>🌸</span>
+
+            <p>
+                Made for
+                <strong>two</strong>
+                people.
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+    </main>
+
+
+    <script src="canvas.js"></script>
+
+</body>
+</html>

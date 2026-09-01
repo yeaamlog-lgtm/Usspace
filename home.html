@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff3f7"
+    >
+
+    <title>USSPACE • Home</title>
+
+    <link rel="stylesheet" href="home.css">
+
+</head>
+
+
+<body>
+
+    <!-- Sakura -->
+    <div
+        id="sakuraContainer"
+        class="sakura-container"
+    ></div>
+
+
+    <!-- =================================================
+         TOP BAR
+         ================================================= -->
+
+    <header class="topbar">
+
+        <div class="topbar-left">
+
+            <div class="mini-logo">
+                🌸
+            </div>
+
+            <div>
+
+                <div class="brand">
+                    US<span>SPACE</span>
+                </div>
+
+                <div class="brand-subtitle">
+                    OUR LITTLE WORLD
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="online-status">
+
+                <span
+                    id="connectionDot"
+                    class="status-dot"
+                ></span>
+
+                <span id="connectionText">
+                    Connecting...
+                </span>
+
+            </div>
+
+
+            <button
+                id="logoutButton"
+                class="icon-button"
+                aria-label="Logout"
+            >
+                ⇥
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =================================================
+         MAIN
+         ================================================= -->
+
+    <main class="home-container">
+
+
+        <!-- =================================================
+             WELCOME
+             ================================================= -->
+
+        <section class="welcome-section">
+
+            <p class="eyebrow">
+                WELCOME BACK
+            </p>
+
+            <h1>
+                Hello,
+                <span id="usernameDisplay">
+                    You
+                </span>
+                ♡
+            </h1>
+
+            <p>
+                Two screens. One little space.
+            </p>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OUR SCREENS
+             ================================================= -->
+
+        <section class="section-card screens-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        📱
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Our Screens
+                        </h2>
+
+                        <p>
+                            See each other
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="video.html"
+                    class="small-link"
+                >
+                    Video Call →
+                </a>
+
+            </div>
+
+
+            <!-- SIDE BY SIDE -->
+
+            <div class="screens-container">
+
+
+                <!-- YOUR SCREEN -->
+
+                <div class="video-screen">
+
+                    <video
+                        id="localVideo"
+                        autoplay
+                        muted
+                        playsinline
+                    ></video>
+
+
+                    <div
+                        id="localPlaceholder"
+                        class="video-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            📷
+                        </div>
+
+                        <strong>
+                            You
+                        </strong>
+
+                        <small>
+                            Camera off
+                        </small>
+
+                    </div>
+
+
+                    <div class="screen-name">
+                        YOU
+                    </div>
+
+                </div>
+
+
+
+                <!-- PARTNER SCREEN -->
+
+                <div class="video-screen">
+
+                    <video
+                        id="remoteVideo"
+                        autoplay
+                        playsinline
+                    ></video>
+
+
+                    <div
+                        id="remotePlaceholder"
+                        class="video-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            🌸
+                        </div>
+
+                        <strong>
+                            Partner
+                        </strong>
+
+                        <small id="partnerStatus">
+                            Waiting to join
+                        </small>
+
+                    </div>
+
+
+                    <div class="screen-name">
+                        PARTNER
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- CAMERA CONTROLS -->
+
+            <div class="camera-controls">
+
+                <button
+                    id="cameraButton"
+                    class="circle-control"
+                    aria-label="Camera"
+                >
+                    📷
+                </button>
+
+
+                <button
+                    id="switchCameraButton"
+                    class="circle-control"
+                    aria-label="Switch Camera"
+                >
+                    🔄
+                </button>
+
+
+                <a
+                    href="video.html"
+                    class="call-button"
+                >
+                    📹 Open Video Call
+                </a>
+
+            </div>
+
+
+            <div
+                id="cameraStatus"
+                class="camera-status"
+            >
+                Camera ready
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CHAT
+             ================================================= -->
+
+        <section class="section-card chat-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        💬
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Little Chat
+                        </h2>
+
+                        <p>
+                            Just between us
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="live-label">
+                    LIVE
+                </span>
+
+            </div>
+
+
+            <div
+                id="chatMessages"
+                class="chat-messages"
+            >
+
+                <div
+                    id="emptyChat"
+                    class="empty-chat"
+                >
+
+                    <div>
+                        🌸
+                    </div>
+
+                    <p>
+                        Say something nice...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="chatForm"
+                class="chat-form"
+            >
+
+                <input
+                    id="chatInput"
+                    type="text"
+                    maxlength="500"
+                    autocomplete="off"
+                    placeholder="Write something..."
+                >
+
+                <button
+                    type="submit"
+                    class="send-button"
+                    aria-label="Send"
+                >
+                    ➤
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             WEATHER
+             ================================================= -->
+
+        <section class="section-card weather-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-icon">
+                        🌤️
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Our Weather
+                        </h2>
+
+                        <p>
+                            Share what's outside
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="weather-people">
+
+
+                <!-- YOUR WEATHER -->
+
+                <div class="weather-person">
+
+                    <span class="weather-label">
+                        YOU
+                    </span>
+
+                    <div
+                        id="myWeatherIcon"
+                        class="weather-icon"
+                    >
+                        🌤️
+                    </div>
+
+                    <strong id="myTemperature">
+                        --°C
+                    </strong>
+
+                    <p id="myWeatherLocation">
+                        Not shared
+                    </p>
+
+                </div>
+
+
+
+                <!-- PARTNER WEATHER -->
+
+                <div class="weather-person">
+
+                    <span class="weather-label">
+                        PARTNER
+                    </span>
+
+                    <div
+                        id="partnerWeatherIcon"
+                        class="weather-icon"
+                    >
+                        🌸
+                    </div>
+
+                    <strong id="partnerTemperature">
+                        --°C
+                    </strong>
+
+                    <p id="partnerWeatherLocation">
+                        Waiting
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="shareWeatherButton"
+                class="weather-button"
+            >
+                🌤️ Share My Weather
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             TAKE A BREAK
+             ================================================= -->
+
+        <section class="break-card">
+
+            <div class="break-decoration">
+                🌿
+            </div>
+
+            <div class="break-content">
+
+                <p class="eyebrow">
+                    SLOW DOWN
+                </p>
+
+                <h2>
+                    Take a little break
+                </h2>
+
+                <p>
+                    Breathe, relax and enjoy
+                    the moment.
+                </p>
+
+            </div>
+
+            <button
+                id="breakButton"
+                class="break-button"
+            >
+                TAKE A BREAK
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+             ================================================= -->
+
+        <section class="navigation-section">
+
+            <div class="navigation-title">
+
+                <p class="eyebrow">
+                    EXPLORE
+                </p>
+
+                <h2>
+                    Our Space 🌸
+                </h2>
+
+            </div>
+
+
+            <nav class="navigation-grid">
+
+
+                <a
+                    href="video.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        📹
+                    </div>
+
+                    <strong>
+                        Video Call
+                    </strong>
+
+                    <small>
+                        See each other
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="canvas.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        🎨
+                    </div>
+
+                    <strong>
+                        Canvas
+                    </strong>
+
+                    <small>
+                        Draw together
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="cinema.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        🎬
+                    </div>
+
+                    <strong>
+                        Cinema
+                    </strong>
+
+                    <small>
+                        Watch together
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="notes.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        📝
+                    </div>
+
+                    <strong>
+                        Notes
+                    </strong>
+
+                    <small>
+                        Write together
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="snaps.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        📸
+                    </div>
+
+                    <strong>
+                        Memories
+                    </strong>
+
+                    <small>
+                        Keep moments
+                    </small>
+
+                </a>
+
+
+
+                <a
+                    href="games.html"
+                    class="navigation-card"
+                >
+
+                    <div class="navigation-icon">
+                        🎮
+                    </div>
+
+                    <strong>
+                        Games
+                    </strong>
+
+                    <small>
+                        Play together
+                    </small>
+
+                </a>
+
+            </nav>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =================================================
+         BREAK OVERLAY
+         ================================================= -->
+
+    <div
+        id="breakOverlay"
+        class="break-overlay"
+        aria-hidden="true"
+    >
+
+        <div class="break-window">
+
+            <div class="break-flower">
+                🌸
+            </div>
+
+            <p class="eyebrow">
+                TAKE A BREATH
+            </p>
+
+            <h2>
+                A little pause ♡
+            </h2>
+
+            <p>
+                Put everything down for a moment.
+                <br>
+                Breathe slowly.
+                <br>
+                Enjoy the little things.
+            </p>
+
+            <div class="breathing-circle">
+                BREATHE
+            </div>
+
+            <button
+                id="closeBreakButton"
+                class="close-break-button"
+            >
+                Back to USSPACE
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HOME JAVASCRIPT -->
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="home.js"></script>
+
+</body>
+
+</html>

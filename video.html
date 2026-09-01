@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#fff5f8"
+    >
+
+    <title>USSPACE — Video Call</title>
+
+    <link
+        rel="stylesheet"
+        href="video.css"
+    >
+</head>
+
+<body>
+
+    <!-- Sakura background -->
+    <div
+        id="sakuraContainer"
+        class="sakura-container"
+        aria-hidden="true"
+    ></div>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+
+    <!-- =====================================================
+         PAGE
+         ===================================================== -->
+
+    <main class="video-page">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <header class="video-header">
+
+            <a
+                href="home.html"
+                class="back-button"
+                aria-label="Back to home"
+            >
+                ←
+            </a>
+
+
+            <div class="video-brand">
+
+                <div class="brand-flower">
+                    🌸
+                </div>
+
+                <div>
+                    <strong>
+                        US<span>SPACE</span>
+                    </strong>
+
+                    <small>
+                        OUR LITTLE CALL
+                    </small>
+                </div>
+
+            </div>
+
+
+            <div
+                class="connection-pill"
+                id="connectionPill"
+            >
+
+                <span
+                    class="connection-dot"
+                    id="connectionDot"
+                ></span>
+
+                <span
+                    id="connectionText"
+                >
+                    Connecting
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CALL AREA
+             ================================================= -->
+
+        <section class="call-area">
+
+
+            <!-- =================================================
+                 YOUR VIDEO
+                 ================================================= -->
+
+            <article
+                class="video-card local-card"
+                id="localCard"
+            >
+
+                <video
+                    id="localVideo"
+                    class="video-element"
+                    autoplay
+                    playsinline
+                    muted
+                ></video>
+
+
+                <!-- Camera off screen -->
+
+                <div
+                    id="localPlaceholder"
+                    class="video-placeholder"
+                >
+
+                    <div class="placeholder-avatar">
+                        🌸
+                    </div>
+
+                    <strong id="localName">
+                        You
+                    </strong>
+
+                    <small>
+                        Camera is off
+                    </small>
+
+                </div>
+
+
+                <!-- Name -->
+
+                <div class="video-name">
+
+                    <span class="live-indicator"></span>
+
+                    <strong id="localNameLabel">
+                        You
+                    </strong>
+
+                </div>
+
+
+                <!-- Camera state -->
+
+                <div
+                    class="camera-state"
+                    id="localCameraState"
+                >
+                    Camera ON
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 PARTNER VIDEO
+                 ================================================= -->
+
+            <article
+                class="video-card remote-card"
+                id="remoteCard"
+            >
+
+                <video
+                    id="remoteVideo"
+                    class="video-element"
+                    autoplay
+                    playsinline
+                ></video>
+
+
+                <!-- Waiting screen -->
+
+                <div
+                    id="remotePlaceholder"
+                    class="video-placeholder"
+                >
+
+                    <div class="placeholder-avatar partner">
+                        💕
+                    </div>
+
+                    <strong id="remoteName">
+                        Pratishtha
+                    </strong>
+
+                    <small id="remoteWaitingText">
+                        Waiting for your partner...
+                    </small>
+
+                    <div
+                        class="waiting-animation"
+                        aria-hidden="true"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+
+                <!-- Partner name -->
+
+                <div class="video-name">
+
+                    <span
+                        class="live-indicator partner-live"
+                        id="remoteLiveIndicator"
+                    ></span>
+
+                    <strong id="remoteNameLabel">
+                        Pratishtha
+                    </strong>
+
+                </div>
+
+
+                <!-- Partner state -->
+
+                <div
+                    class="camera-state"
+                    id="remoteCameraState"
+                >
+                    Waiting...
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================================
+             PARTNER JOIN MESSAGE
+             ================================================= -->
+
+        <div
+            class="partner-notification"
+            id="partnerNotification"
+            aria-hidden="true"
+        >
+
+            <div class="notification-icon">
+                🌸
+            </div>
+
+            <div>
+
+                <strong>
+                    Your partner is here!
+                </strong>
+
+                <small>
+                    Your little video space is ready.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CALL STATUS
+             ================================================= -->
+
+        <section class="call-status">
+
+            <div
+                class="status-icon"
+                id="statusIcon"
+            >
+                🌸
+            </div>
+
+            <div>
+
+                <strong id="statusTitle">
+                    Waiting for your partner
+                </strong>
+
+                <small id="statusDescription">
+                    Keep this page open while
+                    your partner joins.
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONTROLS
+             ================================================= -->
+
+        <section class="controls-panel">
+
+
+            <!-- Microphone -->
+
+            <button
+                type="button"
+                class="control-button"
+                id="microphoneButton"
+                aria-label="Toggle microphone"
+                aria-pressed="true"
+            >
+
+                <span class="control-icon">
+                    🎤
+                </span>
+
+                <small>
+                    Mic
+                </small>
+
+            </button>
+
+
+            <!-- Speaker -->
+
+            <button
+                type="button"
+                class="control-button"
+                id="speakerButton"
+                aria-label="Toggle speaker"
+                aria-pressed="true"
+            >
+
+                <span class="control-icon">
+                    🔊
+                </span>
+
+                <small>
+                    Sound
+                </small>
+
+            </button>
+
+
+            <!-- Camera -->
+
+            <button
+                type="button"
+                class="control-button"
+                id="cameraButton"
+                aria-label="Toggle camera"
+                aria-pressed="true"
+            >
+
+                <span class="control-icon">
+                    📷
+                </span>
+
+                <small>
+                    Camera
+                </small>
+
+            </button>
+
+
+            <!-- Switch camera -->
+
+            <button
+                type="button"
+                class="control-button"
+                id="switchCameraButton"
+                aria-label="Switch camera"
+            >
+
+                <span class="control-icon">
+                    🔄
+                </span>
+
+                <small>
+                    Flip
+                </small>
+
+            </button>
+
+
+            <!-- Fullscreen -->
+
+            <button
+                type="button"
+                class="control-button"
+                id="fullscreenButton"
+                aria-label="Fullscreen"
+            >
+
+                <span class="control-icon">
+                    ⛶
+                </span>
+
+                <small>
+                    Full
+                </small>
+
+            </button>
+
+
+            <!-- Leave -->
+
+            <button
+                type="button"
+                class="control-button leave-control"
+                id="leaveButton"
+                aria-label="Leave call"
+            >
+
+                <span class="control-icon">
+                    🚪
+                </span>
+
+                <small>
+                    Leave
+                </small>
+
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             AUDIO NOTICE
+             ================================================= -->
+
+        <div
+            class="audio-note"
+            id="audioNote"
+        >
+
+            <span>🎧</span>
+
+            <p>
+                Camera and microphone are controlled
+                only by you.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="video-footer">
+
+            <span>🌸</span>
+
+            <p>
+                Just two people,
+                <strong>one little space.</strong>
+            </p>
+
+            <span>🌸</span>
+
+        </footer>
+
+    </main>
+
+
+    <!-- =====================================================
+         LEAVE CONFIRMATION
+         ===================================================== -->
+
+    <div
+        class="leave-modal"
+        id="leaveModal"
+        aria-hidden="true"
+    >
+
+        <div class="leave-box">
+
+            <div class="leave-flower">
+                🌸
+            </div>
+
+            <h2>
+                Leave the call?
+            </h2>
+
+            <p>
+                You can always come back
+                to your little space.
+            </p>
+
+            <div class="leave-actions">
+
+                <button
+                    type="button"
+                    id="cancelLeave"
+                    class="cancel-leave"
+                >
+                    Stay
+                </button>
+
+                <button
+                    type="button"
+                    id="confirmLeave"
+                    class="confirm-leave"
+                >
+                    Leave
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Socket.IO signalling -->
+    <script
+        src="/socket.io/socket.io.js"
+    ></script>
+
+    <!-- Independent video logic -->
+    <script
+        src="video.js"
+    ></script>
+
+</body>
+</html>
